@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Timestamper</string>
+    <string name="play_btn_text">Play</string>
+    <string name="pause_btn_text">Pause</string>
+    <string name="mark_btn_text">Set Timestamp</string>
+    <string name="nextstamp_btn_text">Next Timestamp</string>
+    <string name="restart_btn_text">Restart</string>
+    <string name="mark_toast_text">Timestamp Saved: </string>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="16dp">
+            <TextView
+                android:id="@+id/curr_time_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:text="00:00:00"/>
+            <SeekBar
+                android:id="@+id/seekbar_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/curr_time_text_view"
+                android:layout_marginBottom="64dp"/>
+
+            <Button
+                android:id="@+id/play_button_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/seekbar_view"
+                android:layout_marginBottom="24dp"
+                android:text="@string/play_btn_text"/>
+
+            <Button
+                android:id="@+id/mark_button_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/play_button_view"
+                android:layout_marginBottom="24dp"
+                android:text="@string/mark_btn_text"/>
+
+            <Button
+                android:id="@+id/nextstamp_button_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/mark_button_view"
+                android:layout_marginBottom="24dp"
+                android:text="@string/nextstamp_btn_text"/>
+
+            <Button
+                android:id="@+id/restart_button_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/nextstamp_button_view"
+                android:text="@string/restart_btn_text"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
