@@ -22,15 +22,15 @@ public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer mMediaPlayer;
     private boolean mpPrepared = false;
-    private boolean isPlaying = false;
     private ArrayList<Integer> timestamps;
-    private int stampArrayPos = 0;
+    private int stampArrayPos = -1;
     private int stampTimeCushion = 1000;
     private SeekBar seekBar;
     private Handler seekBarHandler;
     private Runnable seekBarRunnable;
     private int seekTime;
     private boolean seekBarTouched;
+    private Button playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Setting up seekbar
     private void setupSeekBar(){
-        seekBar = (SeekBar)findViewById(R.id.seekbar_view);
-        final TextView currTime = (TextView)findViewById(R.id.curr_time_text_view);
+        seekBar = findViewById(R.id.seekbar_view);
+        final TextView currTime = findViewById(R.id.curr_time_text_view);
         seekBarHandler = new Handler();
         seekBarRunnable = new Runnable() {
             @Override
@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         seekBar.setMax(mMediaPlayer.getDuration());
 
-        // TODO: Convert time from milliseconds to minute:second:millisecond format
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -95,11 +94,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // TODO: Create seperate functions for each listener
-    // TODO: Add left and right arrow buttons to select timestamp
     private void setupClickListeners(){
         // Setting up play/pause button listener
-        final Button playButton = (Button)findViewById(R.id.play_button_view);
+        setPlayButtonListener();
+
+        // Setting up button to restart clip
+        setRestartButtonListener();
+
+        // Setting up timestamp creation button
+        setTimestamperButtonListener();
+
+        // Setup next timestamp navigation button
+        setNextTimestampNavButtonListener();
+
+        // Setup previous timestamp navigation button
+        setPrevTimestampNavButtonListener();
+
+        // Setup swap to record activity button
+        setRecordActivityButtonListener();
+    }
+
+    private void setPlayButtonListener(){
+        playButton = findViewById(R.id.play_button_view);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,9 +136,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        // Setting up button to restart clip
-        Button restartButton = (Button)findViewById(R.id.restart_button_view);
+    private void setRestartButtonListener(){
+        Button restartButton = findViewById(R.id.restart_button_view);
 
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,14 +150,16 @@ public class MainActivity extends AppCompatActivity {
                     seekBarHandler.removeCallbacks(seekBarRunnable);
                     if (!mMediaPlayer.isPlaying())
                         playButton.setText(R.string.pause_btn_text);
+                    stampArrayPos = -1;
                     mMediaPlayer.start();
                     seekBarHandler.postDelayed(seekBarRunnable, 0);
                 }
             }
         });
+    }
 
-        // Setting up timestamp creation button
-        Button setTimestampButton = (Button)findViewById(R.id.mark_button_view);
+    private void setTimestamperButtonListener(){
+        Button setTimestampButton = findViewById(R.id.mark_button_view);
 
         setTimestampButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,22 +178,23 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, toastText, Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        // Setup timestamp navigation button
+    private void setNextTimestampNavButtonListener(){
         // TODO: Make this easier to use. Buttons for each stamp?
-        Button nextTimestampButton = (Button)findViewById(R.id.nextstamp_button_view);
+        Button nextTimestampButton = findViewById(R.id.nextstamp_button_view);
 
         nextTimestampButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mpPrepared && (timestamps.size() > 0)){
+                    stampArrayPos++;
+
+                    if( stampArrayPos > (timestamps.size() - 1) )
+                        stampArrayPos = 0;
+
                     int stampTime = timestamps.get(stampArrayPos);
                     mMediaPlayer.seekTo(stampTime);
-
-                    if( stampArrayPos == (timestamps.size() - 1) )
-                        stampArrayPos = 0;
-                    else
-                        stampArrayPos++;
 
                     if ( !mMediaPlayer.isPlaying() ) {
                         mMediaPlayer.start();
@@ -182,6 +202,45 @@ public class MainActivity extends AppCompatActivity {
                         playButton.setText(R.string.pause_btn_text);
                     }
                 }
+            }
+        });
+    }
+
+    private void setPrevTimestampNavButtonListener(){
+        Button prevTimestampButton = findViewById(R.id.prevstamp_button_view);
+
+        prevTimestampButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mpPrepared && (timestamps.size() > 0)){
+                    stampArrayPos--;
+
+                    if (stampArrayPos < 0){
+                        stampArrayPos = (timestamps.size() - 1);
+                    }
+
+                    int stampTime = timestamps.get(stampArrayPos);
+                    mMediaPlayer.seekTo(stampTime);
+
+                    if ( !mMediaPlayer.isPlaying() ) {
+                        mMediaPlayer.start();
+                        seekBarHandler.postDelayed(seekBarRunnable, 0);
+                        playButton.setText(R.string.pause_btn_text);
+                    }
+                }
+            }
+        });
+    }
+
+    // TODO: Clean up media player, shut down audio
+    private void setRecordActivityButtonListener(){
+        Button recordActivityButton = findViewById(R.id.record_activity_button_view);
+
+        recordActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LiveRecordActivity.class);
+                startActivity(intent);
             }
         });
     }
