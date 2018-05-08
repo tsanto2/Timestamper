@@ -16,8 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LiveRecordActivity"
-            android:label="@string/record_activity_label"/>
     </application>
 
 </manifest>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_record_frag"
+        android:icon="@android:drawable/ic_btn_speak_now"
+        android:title="Record"
+        />
+
+    <item
+        android:id="@+id/navigation_playback_frag"
+        android:icon="@android:drawable/ic_media_play"
+        android:title="Playback"
+        />
+
+    <item
+        android:id="@+id/navigation_library_frag"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="Library"
+        />
+
+</menu>

@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-public class RecordAudioFragment extends Fragment {
+public class LibraryAccessFragment extends Fragment {
 
-    public static RecordAudioFragment newInstance(){
-        RecordAudioFragment fragment = new RecordAudioFragment();
+    public static LibraryAccessFragment newInstance(){
+        LibraryAccessFragment fragment = new LibraryAccessFragment();
         return fragment;
     }
 
@@ -21,7 +21,7 @@ public class RecordAudioFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_record_audio, container, false);
+        View view = inflater.inflate(R.layout.fragment_access_library, container, false);
 
         return view;
     }
