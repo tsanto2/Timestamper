@@ -3,20 +3,20 @@
 
     <item
         android:id="@+id/navigation_record_frag"
-        android:icon="@android:drawable/ic_btn_speak_now"
+        android:icon="@drawable/ic_baseline_mic_24px"
         android:title="Record"
         />
 
     <item
-        android:id="@+id/navigation_playback_frag"
-        android:icon="@android:drawable/ic_media_play"
-        android:title="Playback"
+        android:id="@+id/navigation_library_frag"
+        android:icon="@drawable/ic_baseline_playlist_play_24px"
+        android:title="Library"
         />
 
     <item
-        android:id="@+id/navigation_library_frag"
-        android:icon="@android:drawable/ic_menu_gallery"
-        android:title="Library"
+        android:id="@+id/navigation_settings_frag"
+        android:icon="@drawable/ic_baseline_settings_20px"
+        android:title="Settings"
         />
 
 </menu>

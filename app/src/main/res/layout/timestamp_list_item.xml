@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:clipToPadding="false"
+    android:clipChildren="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/title_bubble"
+        android:clipToPadding="false"
+        android:elevation="4dp"
+        android:backgroundTint="@color/colorDarkishGray"
+        android:alpha="1"
+        android:padding="12dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/timestamp_item_image_view"
+                android:src="@drawable/ic_baseline_place_24px"
+                android:tint="@color/colorAccent"
+                android:elevation="6dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:scaleType="fitXY"/>
+
+            <TextView
+                android:id="@+id/timestamp_item_time_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:paddingRight="6dp"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:textColor="@color/colorAccent"
+                tools:text="00:00:00"/>
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -3,15 +3,20 @@ package com.example.android.timestamper;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +24,8 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class MediaPlaybackFragment extends Fragment {
@@ -27,18 +34,24 @@ public class MediaPlaybackFragment extends Fragment {
 
     private MediaPlayer mMediaPlayer;
     private boolean mpPrepared = false;
-    private ArrayList<Integer> timestamps;
+    //private ArrayList<Integer> timestamps;
     private int stampArrayPos = -1;
-    private int stampTimeCushion = 1000;
+    //private int stampTimeCushion = 1000;
     private SeekBar seekBar;
     private Handler seekBarHandler;
     private Runnable seekBarRunnable;
     private int seekTime;
     private boolean seekBarTouched;
-    private Button playButton;
+    private ImageButton playButton;
+    private ArrayList<Timestamp> timestamps;
+    private TimestampAdapter timestampAdapter;
+    private int playBtnImage = R.drawable.ic_baseline_play_circle_filled_24px;
+    private int pauseBtnImage = R.drawable.ic_baseline_pause_circle_filled_24px;
+    private static MediaPlaybackFragment fragment;
+    private ListView listView;
 
     public static MediaPlaybackFragment newInstance(){
-        MediaPlaybackFragment fragment = new MediaPlaybackFragment();
+        fragment = new MediaPlaybackFragment();
         return fragment;
     }
 
@@ -54,19 +67,13 @@ public class MediaPlaybackFragment extends Fragment {
 
     }
 
-    //TODO: FIX THIS HACK!!
-    //@Override
-    //public void onStop(){
-    //    super.onStop();
-    //    mMediaPlayer.stop();
-    //    getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-    //}
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_media_playback, container, false);
 
-        timestamps = new ArrayList<Integer>();
+        timestamps = new ArrayList<Timestamp>();
+
+        createTimestampArrayList();
 
         prepareMediaPlayer();
 
@@ -77,7 +84,29 @@ public class MediaPlaybackFragment extends Fragment {
         return view;
     }
 
-    private String getTime(int ms){
+    private void createTimestampArrayList(){
+        timestampAdapter = new TimestampAdapter(getActivity(), timestamps);
+        listView = (ListView)view.findViewById(R.id.timestamp_list);
+        listView.setAdapter(timestampAdapter);
+        listView.setVisibility(View.INVISIBLE);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int stampTime = timestamps.get(i).getCurrTime();
+                mMediaPlayer.seekTo(stampTime);
+
+                if ( !mMediaPlayer.isPlaying() ) {
+                    mMediaPlayer.start();
+                    seekBarHandler.postDelayed(seekBarRunnable, 0);
+                    playButton.setImageResource(pauseBtnImage);
+                    //playButton.setText(R.string.pause_btn_text);
+                }
+            }
+        });
+    }
+
+    public static String getTime(int ms){
         Date time = new Date(ms);
         DateFormat formatter = new SimpleDateFormat("mm:ss:SS");
         String timeFormatted = formatter.format(time);
@@ -152,13 +181,15 @@ public class MediaPlaybackFragment extends Fragment {
                     // Play if audio is not playing
                     if (!mMediaPlayer.isPlaying()) {
                         mMediaPlayer.start();
-                        playButton.setText(R.string.pause_btn_text);
+                        playButton.setImageResource(pauseBtnImage);
+                        //playButton.setText(R.string.pause_btn_text);
                         seekBarHandler.postDelayed(seekBarRunnable, 0);
                     }
                     // Pause if audio is playing
                     else if (mMediaPlayer.isPlaying()){
                         mMediaPlayer.pause();
-                        playButton.setText(R.string.play_btn_text);
+                        playButton.setImageResource(playBtnImage);
+                        //playButton.setText(R.string.play_btn_text);
                         seekBarHandler.removeCallbacks(seekBarRunnable);
                     }
                 }
@@ -167,7 +198,7 @@ public class MediaPlaybackFragment extends Fragment {
     }
 
     private void setRestartButtonListener(){
-        Button restartButton = view.findViewById(R.id.restart_button_view);
+        ImageButton restartButton = view.findViewById(R.id.restart_button_view);
 
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,10 +207,11 @@ public class MediaPlaybackFragment extends Fragment {
                 if (mpPrepared){
                     mMediaPlayer.seekTo(0);
                     seekBarHandler.removeCallbacks(seekBarRunnable);
-                    if (!mMediaPlayer.isPlaying())
-                        playButton.setText(R.string.pause_btn_text);
+                    //if (!mMediaPlayer.isPlaying())
+                    playButton.setImageResource(playBtnImage);
+                        //playButton.setText(R.string.pause_btn_text);
                     stampArrayPos = -1;
-                    mMediaPlayer.start();
+                    mMediaPlayer.pause();
                     seekBarHandler.postDelayed(seekBarRunnable, 0);
                 }
             }
@@ -187,7 +219,7 @@ public class MediaPlaybackFragment extends Fragment {
     }
 
     private void setTimestamperButtonListener(){
-        Button setTimestampButton = view.findViewById(R.id.mark_button_view);
+        ImageButton setTimestampButton = view.findViewById(R.id.mark_button_view);
 
         setTimestampButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,21 +228,36 @@ public class MediaPlaybackFragment extends Fragment {
                 // This variable is used to compensate for user pressing button after intended mark
                 // location.
                 // TODO: Make cushion user defined setting
-                int stampTime = mMediaPlayer.getCurrentPosition() - stampTimeCushion;
+                //int stampTime = mMediaPlayer.getCurrentPosition() - stampTimeCushion;
+                int stampTime = mMediaPlayer.getCurrentPosition();
+
+                listView.findViewById(R.id.timestamp_list).setVisibility(View.VISIBLE);
 
                 // Add timestamp to arraylist
-                timestamps.add(stampTime);
+                timestamps.add(new Timestamp(stampTime));
+                sortTimestamps();
+                timestampAdapter.notifyDataSetChanged();
 
-                String toastText = getResources().getString(R.string.mark_toast_text) + " " + getTime(stampTime);
+                //String toastText = getResources().getString(R.string.mark_toast_text) + " " + getTime(stampTime);
 
-                Toast.makeText(view.getContext(), toastText, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(view.getContext(), toastText, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sortTimestamps(){
+        Collections.sort(timestamps, new Comparator<Timestamp>() {
+            @Override
+            public int compare(Timestamp lhs, Timestamp rhs) {
+                // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+                return lhs.getCurrTime() < rhs.getCurrTime() ? -1 : (lhs.getCurrTime() > rhs.getCurrTime()) ? 1 : 0;
             }
         });
     }
 
     private void setNextTimestampNavButtonListener(){
         // TODO: Make this easier to use. Buttons for each stamp?
-        Button nextTimestampButton = view.findViewById(R.id.nextstamp_button_view);
+        ImageButton nextTimestampButton = view.findViewById(R.id.nextstamp_button_view);
 
         nextTimestampButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,13 +268,14 @@ public class MediaPlaybackFragment extends Fragment {
                     if( stampArrayPos > (timestamps.size() - 1) )
                         stampArrayPos = 0;
 
-                    int stampTime = timestamps.get(stampArrayPos);
+                    int stampTime = timestamps.get(stampArrayPos).getCurrTime();
                     mMediaPlayer.seekTo(stampTime);
 
                     if ( !mMediaPlayer.isPlaying() ) {
                         mMediaPlayer.start();
                         seekBarHandler.postDelayed(seekBarRunnable, 0);
-                        playButton.setText(R.string.pause_btn_text);
+                        playButton.setImageResource(pauseBtnImage);
+                        //playButton.setText(R.string.pause_btn_text);
                     }
                 }
             }
@@ -235,7 +283,7 @@ public class MediaPlaybackFragment extends Fragment {
     }
 
     private void setPrevTimestampNavButtonListener(){
-        Button prevTimestampButton = view.findViewById(R.id.prevstamp_button_view);
+        ImageButton prevTimestampButton = view.findViewById(R.id.prevstamp_button_view);
 
         prevTimestampButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,13 +295,14 @@ public class MediaPlaybackFragment extends Fragment {
                         stampArrayPos = (timestamps.size() - 1);
                     }
 
-                    int stampTime = timestamps.get(stampArrayPos);
+                    int stampTime = timestamps.get(stampArrayPos).getCurrTime();
                     mMediaPlayer.seekTo(stampTime);
 
                     if ( !mMediaPlayer.isPlaying() ) {
                         mMediaPlayer.start();
                         seekBarHandler.postDelayed(seekBarRunnable, 0);
-                        playButton.setText(R.string.pause_btn_text);
+                        playButton.setImageResource(pauseBtnImage);
+                        //playButton.setText(R.string.pause_btn_text);
                     }
                 }
             }
