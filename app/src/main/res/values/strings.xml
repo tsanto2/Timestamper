@@ -9,4 +9,6 @@
     <string name="mark_toast_text">Timestamp Saved: </string>
     <string name="record_activity_text">Record New</string>
     <string name="record_activity_label">Record Audio</string>
+    <string name="start_record_btn_text">Record</string>
+    <string name="stop_record_btn_text">Stop</string>
 </resources>
