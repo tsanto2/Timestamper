@@ -43,13 +43,19 @@ public class RecordAudioFragment extends Fragment {
         return view;
     }
 
+    //TODO: Fix file types, path, and encoding
     private void initializeAudioRecorder(){
-        File tempFile = new File(internalDirectory, "TempRecordingFile");
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("Recording", ".ogg", internalDirectory);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         audioRecorder = new MediaRecorder();
         audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_2_TS);
+        audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         audioRecorder.setOutputFile(tempFile.getAbsolutePath());
-        audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.VORBIS);
+        audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         //Log.d("FILELOCATION", internalDirectory.getAbsolutePath());
         try {
             audioRecorder.prepare();
@@ -61,7 +67,7 @@ public class RecordAudioFragment extends Fragment {
     private void recordButtonPressed(Button recordAudioBtn){
         if (!isRecording) {
             isRecording = true;
-
+            audioRecorder.start();
             recordAudioBtn.setText(R.string.stop_record_btn_text);
 
             // Change from hard coded string
@@ -69,8 +75,8 @@ public class RecordAudioFragment extends Fragment {
         }
         else{
             isRecording = false;
+            audioRecorder.stop();
             recordAudioBtn.setText(R.string.start_record_btn_text);
-
             // Change from hard coded string
             Toast.makeText(view.getContext(), "Recording stopped.", Toast.LENGTH_SHORT).show();
         }
