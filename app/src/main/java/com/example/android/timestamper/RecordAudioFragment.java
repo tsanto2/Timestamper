@@ -1,8 +1,10 @@
 package com.example.android.timestamper;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.StringRes;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ public class RecordAudioFragment extends Fragment {
     private boolean isRecording;
     private MediaRecorder audioRecorder;
     private File internalDirectory;
+    private MainActivityInterface mainActivityInterface;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -31,6 +34,18 @@ public class RecordAudioFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        if(activity instanceof MainActivityInterface) {
+            mainActivityInterface = (MainActivityInterface)activity;
+        } else {
+            // Throw an error!
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -77,8 +92,13 @@ public class RecordAudioFragment extends Fragment {
             isRecording = false;
             audioRecorder.stop();
             recordAudioBtn.setText(R.string.start_record_btn_text);
+            /*MediaPlaybackFragment nextFrag= new MediaPlaybackFragment();
+            getActivity().getFragmentManager().beginTransaction()
+                    .replace(R.id.container, nextFrag,"findThisFragment")
+                    .addToBackStack(null)
+                    .commit();*/
             // Change from hard coded string
-            Toast.makeText(view.getContext(), "Recording stopped.", Toast.LENGTH_SHORT).show();
+            mainActivityInterface.SwitchToFragment("Playback");
         }
     }
 

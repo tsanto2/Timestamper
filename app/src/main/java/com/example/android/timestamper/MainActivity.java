@@ -16,8 +16,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainActivityInterface{
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private boolean permissionToRecordAccepted = false;
@@ -54,6 +55,22 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!permissionToRecordAccepted ) finish();
 
+    }
+
+    @Override
+    public void SwitchToFragment(String fragClass){
+        Toast.makeText(getBaseContext(), fragClass, Toast.LENGTH_SHORT).show();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.addToBackStack(RECORD_TAG);
+        transaction.addToBackStack(LIBRARY_TAG);
+        transaction.addToBackStack(SETTINGS_TAG);
+        transaction.hide(libraryFrag);
+        transaction.hide(recordFrag);
+        transaction.hide(settingsFrag);
+        transaction.show(playbackFrag);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
+        bottomNavBar.setVisibility(View.GONE);
     }
 
     private void RequestPermissions(){
