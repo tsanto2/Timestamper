@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements MainActivityInterface{
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -58,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     }
 
     @Override
-    public void SwitchToFragment(String tempAudioFilePath){
+    public void SwitchToFragment(String tempAudioFilePath, ArrayList<Timestamp> timestamps){
         Toast.makeText(getBaseContext(), tempAudioFilePath, Toast.LENGTH_SHORT).show();
 
         MediaPlaybackFragment tempFrag = (MediaPlaybackFragment)getFragmentManager().findFragmentByTag(PLAYBACK_TAG);
-        tempFrag.SetPathString(tempAudioFilePath);
+        tempFrag.SetPlaybackInfo(tempAudioFilePath, timestamps);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

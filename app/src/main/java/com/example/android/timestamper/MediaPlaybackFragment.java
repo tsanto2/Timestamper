@@ -87,19 +87,28 @@ public class MediaPlaybackFragment extends Fragment {
         return view;
     }
 
-    public void SetPathString(String filePath){
+    public void SetPlaybackInfo(String filePath, ArrayList<Timestamp> newTimestamps){
         prepareMediaPlayer(filePath);
+
 
         setupClickListeners();
 
         setupSeekBar();
+
+        timestamps = newTimestamps;
+        sortTimestamps();
+
+        createTimestampArrayList();
+        timestampAdapter.notifyDataSetChanged();
+        listView.setVisibility(View.VISIBLE);
+        listView.findViewById(R.id.timestamp_list).setVisibility(View.VISIBLE);
     }
 
     private void createTimestampArrayList(){
         timestampAdapter = new TimestampAdapter(getActivity(), timestamps);
         listView = (ListView)view.findViewById(R.id.timestamp_list);
         listView.setAdapter(timestampAdapter);
-        listView.setVisibility(View.INVISIBLE);
+        //listView.setVisibility(View.INVISIBLE);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
