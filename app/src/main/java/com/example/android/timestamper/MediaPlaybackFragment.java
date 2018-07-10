@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class MediaPlaybackFragment extends Fragment {
     private int pauseBtnImage = R.drawable.ic_baseline_pause_circle_filled_24px;
     private static MediaPlaybackFragment fragment;
     private ListView listView;
+    private String tempFilePath;
 
     public static MediaPlaybackFragment newInstance(){
         fragment = new MediaPlaybackFragment();
@@ -75,13 +78,21 @@ public class MediaPlaybackFragment extends Fragment {
 
         createTimestampArrayList();
 
-        prepareMediaPlayer();
+        prepareMediaPlayer(null);
 
         setupClickListeners();
 
         setupSeekBar();
 
         return view;
+    }
+
+    public void SetPathString(String filePath){
+        prepareMediaPlayer(filePath);
+
+        setupClickListeners();
+
+        setupSeekBar();
     }
 
     private void createTimestampArrayList(){
@@ -309,13 +320,34 @@ public class MediaPlaybackFragment extends Fragment {
         });
     }
 
-    private void prepareMediaPlayer(){
-        mMediaPlayer = MediaPlayer.create(view.getContext(), R.raw.fart);
+    private void prepareMediaPlayer(String dataPath){
+        if (dataPath == null)
+            mMediaPlayer = MediaPlayer.create(view.getContext(), R.raw.fart);
+        else {
+            Uri dataUri = Uri.parse(dataPath);
+            mMediaPlayer = MediaPlayer.create(view.getContext(), dataUri);
+        }
 
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 mpPrepared = true;
+            }
+        });
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                if (mpPrepared){
+                    mMediaPlayer.seekTo(0);
+                    seekBarHandler.removeCallbacks(seekBarRunnable);
+                    //if (!mMediaPlayer.isPlaying())
+                    playButton.setImageResource(playBtnImage);
+                    //playButton.setText(R.string.pause_btn_text);
+                    stampArrayPos = -1;
+                    mMediaPlayer.pause();
+                    seekBarHandler.postDelayed(seekBarRunnable, 0);
+                }
             }
         });
 

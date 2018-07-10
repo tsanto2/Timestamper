@@ -24,6 +24,7 @@ public class RecordAudioFragment extends Fragment {
     private MediaRecorder audioRecorder;
     private File internalDirectory;
     private MainActivityInterface mainActivityInterface;
+    private String temporaryAudioFilePath;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -63,6 +64,7 @@ public class RecordAudioFragment extends Fragment {
         File tempFile = null;
         try {
             tempFile = File.createTempFile("Recording", ".ogg", internalDirectory);
+            temporaryAudioFilePath = tempFile.getAbsolutePath();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,7 +100,7 @@ public class RecordAudioFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();*/
             // Change from hard coded string
-            mainActivityInterface.SwitchToFragment("Playback");
+            mainActivityInterface.SwitchToFragment(temporaryAudioFilePath);
         }
     }
 
