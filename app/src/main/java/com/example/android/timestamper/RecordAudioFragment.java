@@ -69,7 +69,7 @@ public class RecordAudioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.fragment_record_audio, container, false);
         internalDirectory = getContext().getFilesDir();
-        timestamps = new ArrayList<Timestamp>();
+        timestamps = new ArrayList<>();
 
         InitializeAudioRecorder();
         SetRecordAudioButtonListener();
@@ -131,7 +131,10 @@ public class RecordAudioFragment extends Fragment {
 
             String filename = tempFilePrefix + ".tds";;
             FileOutputStream outputStream;
-            
+
+            // First attempt at saving timestamp array to json file...
+            // Potentially able to save timestamps and audio path together in json file
+            // TODO: Do above...
             JSONArray jsonArray = new JSONArray();
             int jObjIndex = 0;
             for (Timestamp stamp:
@@ -155,7 +158,7 @@ public class RecordAudioFragment extends Fragment {
             }
 
             // Change from hard coded string
-            mainActivityInterface.SwitchToFragment(tempFilePrefix, timestamps);
+            mainActivityInterface.SwitchToFragment(tempFilePrefix);
         }
     }
 

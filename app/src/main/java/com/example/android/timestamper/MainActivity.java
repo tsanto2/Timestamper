@@ -60,11 +60,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     }
 
     @Override
-    public void SwitchToFragment(String tempAudioFilePath, ArrayList<Timestamp> timestamps){
+    public void SwitchToFragment(String tempAudioFilePath){
         Toast.makeText(getBaseContext(), tempAudioFilePath, Toast.LENGTH_SHORT).show();
 
         MediaPlaybackFragment tempFrag = (MediaPlaybackFragment)getFragmentManager().findFragmentByTag(PLAYBACK_TAG);
-        tempFrag.SetPlaybackInfo(tempAudioFilePath, timestamps);
+        tempFrag.SetPlaybackInfo(tempAudioFilePath);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

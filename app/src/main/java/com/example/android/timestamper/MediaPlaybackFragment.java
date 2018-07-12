@@ -92,7 +92,7 @@ public class MediaPlaybackFragment extends Fragment {
         return view;
     }
 
-    public void SetPlaybackInfo(String filePath, ArrayList<Timestamp> newTimestamps){
+    public void SetPlaybackInfo(String filePath){
         String actualFilePath = getContext().getFilesDir() + "/" + filePath + ".ogg";
 
         prepareMediaPlayer(actualFilePath);
