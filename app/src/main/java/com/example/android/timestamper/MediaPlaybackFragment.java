@@ -22,7 +22,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,14 +93,42 @@ public class MediaPlaybackFragment extends Fragment {
     }
 
     public void SetPlaybackInfo(String filePath, ArrayList<Timestamp> newTimestamps){
-        prepareMediaPlayer(filePath);
+        String actualFilePath = getContext().getFilesDir() + "/" + filePath + ".ogg";
 
+        prepareMediaPlayer(actualFilePath);
 
         setupClickListeners();
 
         setupSeekBar();
 
-        timestamps = newTimestamps;
+        StringBuffer stringBuffer = new StringBuffer();
+
+        try {
+            BufferedReader inputReader = new BufferedReader(new
+                    InputStreamReader(getContext().openFileInput(filePath + ".tds")));
+            String inputString;
+
+            while ((inputString = inputReader.readLine()) != null) {
+                stringBuffer.append(inputString);
+            }
+
+            String jsonString = stringBuffer.toString();
+
+            try {
+                JSONArray tempJson = new JSONArray(jsonString);
+
+                for (int i = 0; i < tempJson.length(); i++){
+                    timestamps.add(new Timestamp(tempJson.getInt(i)));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        //timestamps = newTimestamps;
         sortTimestamps();
 
         createTimestampArrayList();

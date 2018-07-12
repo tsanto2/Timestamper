@@ -2,6 +2,7 @@ package com.example.android.timestamper;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,9 +16,18 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class RecordAudioFragment extends Fragment {
 
@@ -27,6 +37,7 @@ public class RecordAudioFragment extends Fragment {
     private File internalDirectory;
     private MainActivityInterface mainActivityInterface;
     private String temporaryAudioFilePath;
+    private String tempFilePrefix;
     private ArrayList<Timestamp> timestamps;
     private Handler timeTrackingHandler;
     private Runnable timeTrackingRunnable;
@@ -69,17 +80,20 @@ public class RecordAudioFragment extends Fragment {
 
     //TODO: Fix file types, path, and encoding
     private void InitializeAudioRecorder(){
-        File tempFile = null;
-        try {
-            tempFile = File.createTempFile("Recording", ".ogg", internalDirectory);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
+        tempFilePrefix = df.format(Calendar.getInstance().getTime());
+        File newFile = new File(internalDirectory, tempFilePrefix + ".ogg");
+        temporaryAudioFilePath = newFile.getAbsolutePath();
+        /*try {
+            File tempFile = File.createTempFile("Recording", ".ogg", internalDirectory);
             temporaryAudioFilePath = tempFile.getAbsolutePath();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         audioRecorder = new MediaRecorder();
         audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        audioRecorder.setOutputFile(tempFile.getAbsolutePath());
+        audioRecorder.setOutputFile(temporaryAudioFilePath);
         audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         //Log.d("FILELOCATION", internalDirectory.getAbsolutePath());
         try {
@@ -94,7 +108,9 @@ public class RecordAudioFragment extends Fragment {
             isRecording = true;
             audioRecorder.start();
             recordAudioBtn.setText(R.string.stop_record_btn_text);
+
             timeTrackingHandler = new Handler();
+
             timeTrackingRunnable = new Runnable() {
                 @Override
                 public void run() {
@@ -112,13 +128,34 @@ public class RecordAudioFragment extends Fragment {
             isRecording = false;
             audioRecorder.stop();
             recordAudioBtn.setText(R.string.start_record_btn_text);
-            /*MediaPlaybackFragment nextFrag= new MediaPlaybackFragment();
-            getActivity().getFragmentManager().beginTransaction()
-                    .replace(R.id.container, nextFrag,"findThisFragment")
-                    .addToBackStack(null)
-                    .commit();*/
+
+            String filename = tempFilePrefix + ".tds";;
+            FileOutputStream outputStream;
+            
+            JSONArray jsonArray = new JSONArray();
+            int jObjIndex = 0;
+            for (Timestamp stamp:
+                 timestamps) {
+                try {
+                    jsonArray.put(jObjIndex, stamp.getCurrTime());
+                    jObjIndex++;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            String json = jsonArray.toString();
+
+            try {
+                outputStream = getContext().openFileOutput(filename, Context.MODE_APPEND);
+                outputStream.write(json.getBytes());
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             // Change from hard coded string
-            mainActivityInterface.SwitchToFragment(temporaryAudioFilePath, timestamps);
+            mainActivityInterface.SwitchToFragment(tempFilePrefix, timestamps);
         }
     }
 
