@@ -60,7 +60,8 @@ public class LibraryAccessFragment extends Fragment {
         }
     }
 
-    private void GetLibraryItems(){
+    public void GetLibraryItems(){
+        libraryItems.clear();
         ArrayList<String> itemNames = new ArrayList<>();
         for (File file : dataDir.listFiles()){
             itemNames.add(RemoveFileExtension(file.getName()));

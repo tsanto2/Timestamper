@@ -27,7 +27,7 @@
 
             <ImageView
                 android:id="@+id/timestamp_item_image_view"
-                android:src="@drawable/ic_baseline_place_24px"
+                android:src="@drawable/ic_baseline_play_circle_filled_24px"
                 android:tint="@color/colorAccent"
                 android:elevation="6dp"
                 android:layout_gravity="center_vertical|start"

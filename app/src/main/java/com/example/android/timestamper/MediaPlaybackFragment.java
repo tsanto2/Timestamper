@@ -114,6 +114,8 @@ public class MediaPlaybackFragment extends Fragment {
 
             String jsonString = stringBuffer.toString();
 
+            timestamps.clear();
+
             try {
                 JSONArray tempJson = new JSONArray(jsonString);
 

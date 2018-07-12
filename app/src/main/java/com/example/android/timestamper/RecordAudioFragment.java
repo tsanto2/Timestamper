@@ -71,7 +71,6 @@ public class RecordAudioFragment extends Fragment {
         internalDirectory = getContext().getFilesDir();
         timestamps = new ArrayList<>();
 
-        InitializeAudioRecorder();
         SetRecordAudioButtonListener();
         SetRecordTimestampButtonListener();
 
@@ -84,12 +83,6 @@ public class RecordAudioFragment extends Fragment {
         tempFilePrefix = df.format(Calendar.getInstance().getTime());
         File newFile = new File(internalDirectory, tempFilePrefix + ".ogg");
         temporaryAudioFilePath = newFile.getAbsolutePath();
-        /*try {
-            File tempFile = File.createTempFile("Recording", ".ogg", internalDirectory);
-            temporaryAudioFilePath = tempFile.getAbsolutePath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         audioRecorder = new MediaRecorder();
         audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
@@ -105,6 +98,7 @@ public class RecordAudioFragment extends Fragment {
 
     private void RecordButtonPressed(Button recordAudioBtn){
         if (!isRecording) {
+            InitializeAudioRecorder();
             isRecording = true;
             audioRecorder.start();
             recordAudioBtn.setText(R.string.stop_record_btn_text);
