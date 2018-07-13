@@ -79,7 +79,7 @@ public class MediaPlaybackFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_media_playback, container, false);
 
-        timestamps = new ArrayList<Timestamp>();
+        timestamps = new ArrayList<>();
 
         createTimestampArrayList();
 
@@ -92,15 +92,8 @@ public class MediaPlaybackFragment extends Fragment {
         return view;
     }
 
-    public void SetPlaybackInfo(String filePath){
-        String actualFilePath = getContext().getFilesDir() + "/" + filePath + ".ogg";
-
-        prepareMediaPlayer(actualFilePath);
-
-        setupClickListeners();
-
-        setupSeekBar();
-
+    // Load string using prefix and parse to json, then extract timestamps
+    private void LoadTimestamps(String filePath){
         StringBuffer stringBuffer = new StringBuffer();
 
         try {
@@ -128,9 +121,21 @@ public class MediaPlaybackFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public void SetPlaybackInfo(String filePath){
+        // Get full path from prefix of recording sent here to be played
+        String actualFilePath = getContext().getFilesDir() + "/" + filePath + ".ogg";
 
-        //timestamps = newTimestamps;
+        // Re-initialize media player and other views with requested prefix name
+        prepareMediaPlayer(actualFilePath);
+
+        setupClickListeners();
+
+        setupSeekBar();
+
+        LoadTimestamps(filePath);
+
         sortTimestamps();
 
         createTimestampArrayList();
@@ -140,11 +145,13 @@ public class MediaPlaybackFragment extends Fragment {
     }
 
     private void createTimestampArrayList(){
+        // Load timestamps into view
         timestampAdapter = new TimestampAdapter(getActivity(), timestamps);
         listView = (ListView)view.findViewById(R.id.timestamp_list);
         listView.setAdapter(timestampAdapter);
         //listView.setVisibility(View.INVISIBLE);
 
+        // Execute when timestamp is tapped
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

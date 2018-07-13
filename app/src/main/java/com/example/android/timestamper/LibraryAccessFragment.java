@@ -38,8 +38,10 @@ public class LibraryAccessFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.fragment_access_library, container, false);
 
-        libraryItems = new ArrayList<LibraryItem>();
+        // List of saved audio+timestamp items in library
+        libraryItems = new ArrayList<>();
 
+        // Data directory of this app
         dataDir = getContext().getFilesDir();
 
         GetLibraryItems();
@@ -49,6 +51,7 @@ public class LibraryAccessFragment extends Fragment {
         return view;
     }
 
+    // Needed to use interface (I think...)
     @Override
     public void onAttach(Activity activity)
     {
@@ -61,12 +64,17 @@ public class LibraryAccessFragment extends Fragment {
     }
 
     public void GetLibraryItems(){
+        //Clear list to avoid duplicates when switching to frag multiple times
         libraryItems.clear();
+
         ArrayList<String> itemNames = new ArrayList<>();
+
+        // Remove file extension for listing names of saved recordings
         for (File file : dataDir.listFiles()){
             itemNames.add(RemoveFileExtension(file.getName()));
         }
 
+        // Following for removing duplicates...
         // Record encountered Strings in HashSet.
         HashSet<String> set = new HashSet<>();
 

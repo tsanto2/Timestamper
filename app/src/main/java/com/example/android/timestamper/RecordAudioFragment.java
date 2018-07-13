@@ -79,80 +79,105 @@ public class RecordAudioFragment extends Fragment {
 
     //TODO: Fix file types, path, and encoding
     private void InitializeAudioRecorder(){
+        // Use time/date for temporary recording name
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
         tempFilePrefix = df.format(Calendar.getInstance().getTime());
+
+        // Create file for output with proper name
         File newFile = new File(internalDirectory, tempFilePrefix + ".ogg");
+
         temporaryAudioFilePath = newFile.getAbsolutePath();
+
         audioRecorder = new MediaRecorder();
+
         audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         audioRecorder.setOutputFile(temporaryAudioFilePath);
         audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        //Log.d("FILELOCATION", internalDirectory.getAbsolutePath());
+
         try {
             audioRecorder.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Runnable for tracking current length of recording
+        timeTrackingHandler = new Handler();
+
+        timeTrackingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                timeMillis += 10;
+                timeTrackingHandler.postDelayed(this, 10);
+            }
+        };
+
+        // Pause runnable until recording begins
+        timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
+        timeMillis = 0;
     }
 
     private void RecordButtonPressed(Button recordAudioBtn){
         if (!isRecording) {
+            // Prepare media recorder and initialize/re-initialize variables properly
             InitializeAudioRecorder();
             isRecording = true;
-            audioRecorder.start();
             recordAudioBtn.setText(R.string.stop_record_btn_text);
+            timeMillis = 0;
+            timestamps.clear();
 
-            timeTrackingHandler = new Handler();
+            // Start recording
+            audioRecorder.start();
 
-            timeTrackingRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    timeMillis += 10;
-                    timeTrackingHandler.postDelayed(this, 10);
-                }
-            };
-
+            // Start runnable
             timeTrackingHandler.postDelayed(timeTrackingRunnable, 10);
 
             // Change from hard coded string
             Toast.makeText(view.getContext(), "Recording started.", Toast.LENGTH_SHORT).show();
         }
         else{
+            // Set recording variables, pause runnable, stop recording
             isRecording = false;
-            audioRecorder.stop();
             recordAudioBtn.setText(R.string.start_record_btn_text);
+            timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
+            audioRecorder.stop();
 
-            String filename = tempFilePrefix + ".tds";;
-            FileOutputStream outputStream;
-
-            // First attempt at saving timestamp array to json file...
-            // Potentially able to save timestamps and audio path together in json file
-            // TODO: Do above...
-            JSONArray jsonArray = new JSONArray();
-            int jObjIndex = 0;
-            for (Timestamp stamp:
-                 timestamps) {
-                try {
-                    jsonArray.put(jObjIndex, stamp.getCurrTime());
-                    jObjIndex++;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            String json = jsonArray.toString();
-
-            try {
-                outputStream = getContext().openFileOutput(filename, Context.MODE_APPEND);
-                outputStream.write(json.getBytes());
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            SaveRecording();
 
             // Change from hard coded string
             mainActivityInterface.SwitchToFragment(tempFilePrefix);
+        }
+    }
+
+    private void SaveRecording(){
+        // Create filename for timestamp list with same prefix as audio
+        String filename = tempFilePrefix + ".tds";
+        FileOutputStream outputStream;
+
+        // Create json array for saving array
+        JSONArray jsonArray = new JSONArray();
+        int jObjIndex = 0;
+        for (Timestamp stamp:
+                timestamps) {
+            try {
+                // Add each stamp to json array
+                jsonArray.put(jObjIndex, stamp.getCurrTime());
+                jObjIndex++;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Convert json containing stamps to string so it can be saved
+        String json = jsonArray.toString();
+
+        // Save json string to file
+        try {
+            outputStream = getContext().openFileOutput(filename, Context.MODE_APPEND);
+            outputStream.write(json.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

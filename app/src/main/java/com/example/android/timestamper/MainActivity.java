@@ -59,10 +59,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
     }
 
+    // Implementation of interface function
+    // Used for switching to playback fragment and passing filename to play
     @Override
     public void SwitchToFragment(String tempAudioFilePath){
-        Toast.makeText(getBaseContext(), tempAudioFilePath, Toast.LENGTH_SHORT).show();
-
         MediaPlaybackFragment tempFrag = (MediaPlaybackFragment)getFragmentManager().findFragmentByTag(PLAYBACK_TAG);
         tempFrag.SetPlaybackInfo(tempAudioFilePath);
 
