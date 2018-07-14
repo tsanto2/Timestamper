@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     public void SwitchToFragment(String tempAudioFilePath){
         MediaPlaybackFragment tempFrag = (MediaPlaybackFragment)getFragmentManager().findFragmentByTag(PLAYBACK_TAG);
         tempFrag.SetPlaybackInfo(tempAudioFilePath);
+        LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)getFragmentManager().findFragmentByTag(LIBRARY_TAG);
+        tempLibFrag.RefreashLibraryItemAdapter();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -193,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     @Override
     public void onBackPressed(){
         if (isPlaybackFrag){
+            getSupportActionBar().show();
             bottomNavBar.setVisibility(View.VISIBLE);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.addToBackStack(PLAYBACK_TAG);

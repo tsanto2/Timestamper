@@ -127,6 +127,9 @@ public class MediaPlaybackFragment extends Fragment {
         // Get full path from prefix of recording sent here to be played
         String actualFilePath = getContext().getFilesDir() + "/" + filePath + ".ogg";
 
+        TextView titleTextView = view.findViewById(R.id.recording_title_text_view);
+        titleTextView.setText(filePath);
+
         // Re-initialize media player and other views with requested prefix name
         prepareMediaPlayer(actualFilePath);
 

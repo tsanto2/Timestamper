@@ -91,6 +91,10 @@ public class LibraryAccessFragment extends Fragment{
         }
     }
 
+    public void RefreashLibraryItemAdapter(){
+        libraryItemAdapter.notifyDataSetChanged();
+    }
+
     private void SetUpArrayAdapter(){
         libraryItemAdapter = new LibraryItemAdapter(getActivity(), libraryItems, mainActivityInterface);
         listView = view.findViewById(R.id.library_list);
@@ -104,14 +108,6 @@ public class LibraryAccessFragment extends Fragment{
                 mainActivityInterface.SwitchToFragment(libraryItems.get(i).getItemName());
             }
         });
-
-        /*ImageView image = view.findViewById(R.id.library_item_options_button_view);
-        image.setOnClickListener(new ImageView.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Toast.makeText(view.getContext(), "Pissin", Toast.LENGTH_SHORT).show();
-            }
-        });*/
     }
 
     private String RemoveFileExtension(String name){
