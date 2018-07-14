@@ -1,5 +1,7 @@
 package com.example.android.timestamper;
 
+import android.view.View;
+
 import java.util.ArrayList;
 
 public interface MainActivityInterface {

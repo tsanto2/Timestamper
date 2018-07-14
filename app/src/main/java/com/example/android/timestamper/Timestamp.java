@@ -2,15 +2,22 @@ package com.example.android.timestamper;
 
 public class Timestamp {
 
-    private String mTimeText;
+    private String mTimestampComment = "";
     private int mCurrTime = 0;
 
     public Timestamp(int currTime){
         mCurrTime = currTime;
     }
+    public Timestamp(int currTime, String comment){
+        mCurrTime = currTime;
+        mTimestampComment = comment;
+    }
 
-    public String getTimeText(){
-        return mTimeText;
+    public void SetTimestampComment(String comment){
+        mTimestampComment = comment;
+    }
+    public String getTimestampComment(){
+        return mTimestampComment;
     }
 
     public int getCurrTime(){

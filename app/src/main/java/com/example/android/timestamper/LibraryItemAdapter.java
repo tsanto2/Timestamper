@@ -3,22 +3,34 @@ package com.example.android.timestamper;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
-public class LibraryItemAdapter extends ArrayAdapter<LibraryItem> {
-    public LibraryItemAdapter(Activity context, ArrayList<LibraryItem> libraryItems){
+public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
+    private LibraryItemAdapter thisAdapter;
+    private ArrayList<LibraryItem> items;
+    private MainActivityInterface mainActivityInterface;
+
+    public LibraryItemAdapter(Activity context, ArrayList<LibraryItem> libraryItems, MainActivityInterface mai){
         super(context, 0, libraryItems);
+        items = libraryItems;
+        mainActivityInterface = mai;
+        thisAdapter = this;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
+    public View getView(final int position, @Nullable View convertView, @NonNull final ViewGroup parent){
         View listItemView = convertView;
 
         if (listItemView == null){
@@ -28,8 +40,49 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem> {
 
         final LibraryItem currentItem = getItem(position);
 
-        TextView libraryItemNameTextView = (TextView)listItemView.findViewById(R.id.library_item_name_text_view);
+        TextView libraryItemNameTextView = listItemView.findViewById(R.id.library_item_name_text_view);
         libraryItemNameTextView.setText(currentItem.getItemName());
+
+        ImageView libraryItemImageView = listItemView.findViewById(R.id.library_item_options_button_view);
+        libraryItemImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getContext(), v);
+                // Inflate the menu from xml
+                popup.inflate(R.menu.library_item_options);
+                // Setup menu item selection
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // TODO: Add menu item for adding description/comment for timestamp
+                        switch (item.getItemId()) {
+                            case R.id.item_option_delete:
+                                // TODO: Create pop-up dialogue to check if user actually wants to delete
+                                Toast.makeText(getContext(), "DELETING FILES.", Toast.LENGTH_SHORT).show();
+
+                                // Delete associated files from directory
+                                File file = new File(getContext().getFilesDir(), currentItem.getItemName()+".ogg");
+                                file.delete();
+                                file = new File(getContext().getFilesDir(), currentItem.getItemName() + ".tds");
+                                file.delete();
+
+                                // Remove item from ArrayList and update adaptor
+                                items.remove(getItem(position));
+                                thisAdapter.notifyDataSetChanged();
+
+                                return true;
+                            case R.id.item_option_toast:
+                                // This is just for testing
+                                Toast.makeText(getContext(), currentItem.getItemName(), Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                // Show the menu
+                popup.show();
+            }
+        });
 
         return listItemView;
     }

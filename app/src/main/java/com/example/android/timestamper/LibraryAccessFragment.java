@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -15,7 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class LibraryAccessFragment extends Fragment {
+public class LibraryAccessFragment extends Fragment{
 
     private LibraryItemAdapter libraryItemAdapter;
     private MainActivityInterface mainActivityInterface;
@@ -90,7 +92,7 @@ public class LibraryAccessFragment extends Fragment {
     }
 
     private void SetUpArrayAdapter(){
-        libraryItemAdapter = new LibraryItemAdapter(getActivity(), libraryItems);
+        libraryItemAdapter = new LibraryItemAdapter(getActivity(), libraryItems, mainActivityInterface);
         listView = view.findViewById(R.id.library_list);
         listView.setAdapter(libraryItemAdapter);
 
@@ -102,6 +104,14 @@ public class LibraryAccessFragment extends Fragment {
                 mainActivityInterface.SwitchToFragment(libraryItems.get(i).getItemName());
             }
         });
+
+        /*ImageView image = view.findViewById(R.id.library_item_options_button_view);
+        image.setOnClickListener(new ImageView.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Toast.makeText(view.getContext(), "Pissin", Toast.LENGTH_SHORT).show();
+            }
+        });*/
     }
 
     private String RemoveFileExtension(String name){
