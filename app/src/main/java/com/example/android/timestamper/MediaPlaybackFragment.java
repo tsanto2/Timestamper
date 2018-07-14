@@ -2,6 +2,7 @@ package com.example.android.timestamper;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -26,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
@@ -94,6 +97,7 @@ public class MediaPlaybackFragment extends Fragment {
 
     // Load string using prefix and parse to json, then extract timestamps
     private void LoadTimestamps(String filePath){
+        tempFilePath = filePath;
         StringBuffer stringBuffer = new StringBuffer();
 
         try {
@@ -302,10 +306,36 @@ public class MediaPlaybackFragment extends Fragment {
                 timestamps.add(new Timestamp(stampTime));
                 sortTimestamps();
                 timestampAdapter.notifyDataSetChanged();
+                FileOutputStream outputStream;
 
-                //String toastText = getResources().getString(R.string.mark_toast_text) + " " + getTime(stampTime);
+                File oldFile = new File(getContext().getFilesDir(), tempFilePath + ".tds");
+                oldFile.delete();
 
-                //Toast.makeText(view.getContext(), toastText, Toast.LENGTH_SHORT).show();
+                // Create json array for saving array
+                JSONArray jsonArray = new JSONArray();
+                int jObjIndex = 0;
+                for (Timestamp stamp:
+                        timestamps) {
+                    try {
+                        // Add each stamp to json array
+                        jsonArray.put(jObjIndex, stamp.getCurrTime());
+                        jObjIndex++;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Convert json containing stamps to string so it can be saved
+                String json = jsonArray.toString();
+
+                // Save json string to file
+                try {
+                    outputStream = getContext().openFileOutput(tempFilePath + ".tds", Context.MODE_APPEND);
+                    outputStream.write(json.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
