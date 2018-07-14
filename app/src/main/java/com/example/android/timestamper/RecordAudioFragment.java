@@ -42,6 +42,7 @@ public class RecordAudioFragment extends Fragment {
     private Handler timeTrackingHandler;
     private Runnable timeTrackingRunnable;
     private int timeMillis;
+    private View recordAudioButton;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -117,12 +118,13 @@ public class RecordAudioFragment extends Fragment {
         timeMillis = 0;
     }
 
-    private void RecordButtonPressed(Button recordAudioBtn){
+    private void RecordButtonPressed(){
         if (!isRecording) {
             // Prepare media recorder and initialize/re-initialize variables properly
             InitializeAudioRecorder();
             isRecording = true;
-            recordAudioBtn.setText(R.string.stop_record_btn_text);
+            Button btn = (Button)recordAudioButton;
+            btn.setText(R.string.stop_record_btn_text);
             timeMillis = 0;
             timestamps.clear();
 
@@ -136,16 +138,24 @@ public class RecordAudioFragment extends Fragment {
             Toast.makeText(view.getContext(), "Recording started.", Toast.LENGTH_SHORT).show();
         }
         else{
+            StopRecording(true);
+        }
+    }
+
+    public void StopRecording(Boolean manuallyEnded){
+        if (isRecording) {
             // Set recording variables, pause runnable, stop recording
             isRecording = false;
-            recordAudioBtn.setText(R.string.start_record_btn_text);
+            Button btn = (Button) recordAudioButton;
+            btn.setText(R.string.start_record_btn_text);
             timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
             audioRecorder.stop();
 
             SaveRecording();
 
             // Change from hard coded string
-            mainActivityInterface.SwitchToFragment(tempFilePrefix);
+            if (manuallyEnded)
+                mainActivityInterface.SwitchToFragment(tempFilePrefix);
         }
     }
 
@@ -187,12 +197,12 @@ public class RecordAudioFragment extends Fragment {
     }
 
     private void SetRecordAudioButtonListener(){
-        final Button recordAudioButton = view.findViewById(R.id.record_audio_btn);
+        recordAudioButton = view.findViewById(R.id.record_audio_btn);
 
         recordAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RecordButtonPressed(recordAudioButton);
+                RecordButtonPressed();
             }
         });
     }

@@ -122,6 +122,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                         String hide2 = null;
                         String hide3 = null;
 
+                        if (prevFrag == recordFrag){
+                            RecordAudioFragment tempFrag = (RecordAudioFragment)getFragmentManager().findFragmentByTag(RECORD_TAG);
+                            tempFrag.StopRecording(false);
+                        }
+
                         switch (item.getItemId()){
                             case R.id.navigation_record_frag:
                                 selectedFragment = getFragmentManager().findFragmentByTag(RECORD_TAG);
