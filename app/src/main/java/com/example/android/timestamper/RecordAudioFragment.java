@@ -6,6 +6,7 @@ import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.MainThread;
 import android.support.annotation.StringRes;
 import android.util.Log;
@@ -46,6 +47,7 @@ public class RecordAudioFragment extends Fragment {
     private Runnable timeTrackingRunnable;
     private int timeMillis;
     private View recordAudioButton;
+    private long startTime, currTime;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -135,6 +137,7 @@ public class RecordAudioFragment extends Fragment {
 
             // Start recording
             audioRecorder.start();
+            startTime = SystemClock.uptimeMillis();
 
             // Start runnable
             timeTrackingHandler.postDelayed(timeTrackingRunnable, 10);
@@ -156,6 +159,7 @@ public class RecordAudioFragment extends Fragment {
             TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
             text.setText("Record");
             timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
+            startTime = 0;
             audioRecorder.stop();
 
             SaveRecording();
@@ -199,8 +203,11 @@ public class RecordAudioFragment extends Fragment {
     }
 
     private void RecordTimestampButtonPressed(){
-        timestamps.add(new Timestamp(timeMillis));
-        Toast.makeText(view.getContext(), "Time added: " + Integer.toString(timeMillis)  , Toast.LENGTH_SHORT).show();
+        if (isRecording) {
+            currTime = SystemClock.uptimeMillis() - startTime;
+            timestamps.add(new Timestamp((int) currTime));
+            Toast.makeText(view.getContext(), "Time added: " + Integer.toString(timeMillis), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void SetRecordAudioButtonListener(){
