@@ -93,6 +93,9 @@ public class LibraryAccessFragment extends Fragment{
 
     public void RefreashLibraryItemAdapter(){
         libraryItemAdapter.notifyDataSetChanged();
+        if (libraryItems.size() == 0){
+            //TODO: Add TextView stating no recordings exist
+        }
     }
 
     private void SetUpArrayAdapter(){

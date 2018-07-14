@@ -14,11 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -123,8 +126,10 @@ public class RecordAudioFragment extends Fragment {
             // Prepare media recorder and initialize/re-initialize variables properly
             InitializeAudioRecorder();
             isRecording = true;
-            Button btn = (Button)recordAudioButton;
-            btn.setText(R.string.stop_record_btn_text);
+            ImageButton btn = (ImageButton)recordAudioButton;
+            btn.setImageResource(R.drawable.ic_baseline_stop_24px);
+            TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
+            text.setText("Stop");
             timeMillis = 0;
             timestamps.clear();
 
@@ -146,8 +151,10 @@ public class RecordAudioFragment extends Fragment {
         if (isRecording) {
             // Set recording variables, pause runnable, stop recording
             isRecording = false;
-            Button btn = (Button) recordAudioButton;
-            btn.setText(R.string.start_record_btn_text);
+            ImageButton btn = (ImageButton) recordAudioButton;
+            btn.setImageResource(R.drawable.ic_baseline_mic_24px);
+            TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
+            text.setText("Record");
             timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
             audioRecorder.stop();
 
@@ -207,7 +214,7 @@ public class RecordAudioFragment extends Fragment {
         });
     }
     private void SetRecordTimestampButtonListener(){
-        final Button recordTimestampButton = view.findViewById(R.id.record_timestamp_btn);
+        final ImageButton recordTimestampButton = view.findViewById(R.id.record_timestamp_btn);
 
         recordTimestampButton.setOnClickListener(new View.OnClickListener() {
             @Override

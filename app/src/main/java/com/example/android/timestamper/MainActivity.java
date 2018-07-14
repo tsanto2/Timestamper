@@ -139,16 +139,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 Log.d("SELECTION", "Record");
                                 break;
 
-                            /*case R.id.navigation_playback_frag:
-                                selectedFragment = getFragmentManager().findFragmentByTag(PLAYBACK_TAG);
-                                isPlaybackFrag = true;
-                                getSupportActionBar().setTitle("Playback");
-                                hide1 = RECORD_TAG;
-                                hide2 = LIBRARY_TAG;
-                                hide3 = SETTINGS_TAG;
-                                Log.d("SELECTION", "Playback");
-                                break;*/
-
                             case R.id.navigation_library_frag:
                                 selectedFragment = getFragmentManager().findFragmentByTag(LIBRARY_TAG);
                                 LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)selectedFragment;
@@ -191,10 +181,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     }
                 }
         );
-
-        /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, recordFrag);
-        transaction.commit();*/
     }
 
     @Override
