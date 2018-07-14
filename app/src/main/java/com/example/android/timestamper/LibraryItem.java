@@ -6,4 +6,8 @@ public class LibraryItem {
     public LibraryItem(String itemName){mItemName = itemName;}
 
     public String getItemName(){return mItemName;}
+
+    public void setNewItemName(String newName){
+        mItemName = newName;
+    }
 }

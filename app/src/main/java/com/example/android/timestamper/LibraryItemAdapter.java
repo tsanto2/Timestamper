@@ -1,14 +1,18 @@
 package com.example.android.timestamper;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +24,7 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
     private LibraryItemAdapter thisAdapter;
     private ArrayList<LibraryItem> items;
     private MainActivityInterface mainActivityInterface;
+    private String m_Text;
 
     public LibraryItemAdapter(Activity context, ArrayList<LibraryItem> libraryItems, MainActivityInterface mai){
         super(context, 0, libraryItems);
@@ -40,7 +45,7 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
 
         final LibraryItem currentItem = getItem(position);
 
-        TextView libraryItemNameTextView = listItemView.findViewById(R.id.library_item_name_text_view);
+        final TextView libraryItemNameTextView = listItemView.findViewById(R.id.library_item_name_text_view);
         libraryItemNameTextView.setText(currentItem.getItemName());
 
         ImageView libraryItemImageView = listItemView.findViewById(R.id.library_item_options_button_view);
@@ -70,6 +75,46 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                 thisAdapter.notifyDataSetChanged();
 
                                 return true;
+
+                            case R.id.item_option_rename:
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Enter New Name");
+
+                                // Set up the input
+                                final EditText input = new EditText(getContext());
+                                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                                builder.setView(input);
+
+                                // Set up the buttons
+                                builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        m_Text = input.getText().toString();
+
+                                        // TODO: Add check for already existing duplicate name
+                                        File file = new File(getContext().getFilesDir(), currentItem.getItemName()+".ogg");
+                                        File newFile = new File(getContext().getFilesDir(), m_Text + ".ogg");
+                                        file.renameTo(newFile);
+
+                                        file = new File(getContext().getFilesDir(), currentItem.getItemName()+".tds");
+                                        newFile = new File(getContext().getFilesDir(), m_Text + ".tds");
+                                        file.renameTo(newFile);
+
+                                        libraryItemNameTextView.setText(m_Text);
+                                        currentItem.setNewItemName(m_Text);
+                                    }
+                                });
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                builder.show();
+                                return true;
+
                             case R.id.item_option_toast:
                                 // This is just for testing
                                 Toast.makeText(getContext(), currentItem.getItemName(), Toast.LENGTH_SHORT).show();
