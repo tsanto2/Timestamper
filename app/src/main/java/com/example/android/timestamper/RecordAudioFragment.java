@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.MainThread;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -205,6 +206,9 @@ public class RecordAudioFragment extends Fragment {
     private void RecordTimestampButtonPressed(){
         if (isRecording) {
             currTime = SystemClock.uptimeMillis() - startTime;
+            currTime -= getActivity().getPreferences(Context.MODE_PRIVATE).getInt("TimestampCushion", 0);
+            if (currTime < 0)
+                currTime = 0;
             timestamps.add(new Timestamp((int) currTime));
             Toast.makeText(view.getContext(), "Time added: " + Integer.toString(timeMillis), Toast.LENGTH_SHORT).show();
         }
