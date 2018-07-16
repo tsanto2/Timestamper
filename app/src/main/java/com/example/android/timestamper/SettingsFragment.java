@@ -79,7 +79,6 @@ public class SettingsFragment extends Fragment {
                 });
 
                 builder.show();
-                Toast.makeText(getContext(), "Cuck", Toast.LENGTH_SHORT).show();
             }
         });
 
