@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.drm.DrmStore;
+import android.media.MediaPlayer;
 import android.os.VibrationEffect;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -186,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     @Override
     public void onBackPressed(){
         if (isPlaybackFrag){
+            MediaPlaybackFragment pFrag = (MediaPlaybackFragment)playbackFrag;
+            pFrag.playButton.setImageResource(R.drawable.ic_baseline_play_circle_filled_24px);
+            MediaPlayer mPlayer = pFrag.GetMediaPlayer();
+            mPlayer.stop();
             getSupportActionBar().show();
             bottomNavBar.setVisibility(View.VISIBLE);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();

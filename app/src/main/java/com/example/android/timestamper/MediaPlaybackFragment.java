@@ -52,7 +52,7 @@ public class MediaPlaybackFragment extends Fragment {
     private Runnable seekBarRunnable;
     private int seekTime;
     private boolean seekBarTouched;
-    private ImageButton playButton;
+    public ImageButton playButton;
     private ArrayList<Timestamp> timestamps;
     private TimestampAdapter timestampAdapter;
     private int playBtnImage = R.drawable.ic_baseline_play_circle_filled_24px;
@@ -93,6 +93,10 @@ public class MediaPlaybackFragment extends Fragment {
         setupSeekBar();
 
         return view;
+    }
+
+    public MediaPlayer GetMediaPlayer(){
+        return mMediaPlayer;
     }
 
     // Load string using prefix and parse to json, then extract timestamps
