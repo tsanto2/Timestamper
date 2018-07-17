@@ -39,7 +39,7 @@ public class RecordAudioFragment extends Fragment {
     private Runnable timeTrackingRunnable;
     private int timeMillis;
     private View recordAudioButton;
-    private long startTime, currTime, pauseTimeMillis;
+    private long startTime, currTime, pauseStartTime, pauseTimeMillis;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -131,6 +131,7 @@ public class RecordAudioFragment extends Fragment {
             TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
             text.setText("Pause");
             timeMillis = 0;
+            pauseTimeMillis = 0;
             timestamps.clear();
 
             // Start recording
@@ -161,7 +162,8 @@ public class RecordAudioFragment extends Fragment {
         //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
         //btn.setColorFilter(R.color.colorSlightlyGray);
 
-        pauseTimeMillis = SystemClock.uptimeMillis();
+        pauseStartTime = SystemClock.uptimeMillis();
+        //pauseTimeMillis += SystemClock.uptimeMillis();
 
         audioRecorder.pause();
         timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
@@ -176,7 +178,7 @@ public class RecordAudioFragment extends Fragment {
         //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
         //btn.setColorFilter(R.color.colorAccent);
 
-        pauseTimeMillis = SystemClock.uptimeMillis() - pauseTimeMillis;
+        pauseTimeMillis = SystemClock.uptimeMillis() - pauseStartTime + pauseTimeMillis;
 
         audioRecorder.resume();
         timeTrackingHandler.postDelayed(timeTrackingRunnable, 10);
