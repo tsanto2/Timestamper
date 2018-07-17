@@ -1,4 +1,4 @@
-package com.example.android.timestamper;
+package com.example.android.audiohighlighter;
 
 import org.junit.Test;
 

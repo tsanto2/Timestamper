@@ -1,4 +1,4 @@
-package com.example.android.timestamper;
+package com.example.android.audiohighlighter;
 
 import android.app.Activity;
 import android.app.AlertDialog;

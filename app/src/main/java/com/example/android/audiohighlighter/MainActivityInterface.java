@@ -1,8 +1,4 @@
-package com.example.android.timestamper;
-
-import android.view.View;
-
-import java.util.ArrayList;
+package com.example.android.audiohighlighter;
 
 public interface MainActivityInterface {
     public void SwitchToFragment(String tempAudioFilePath);

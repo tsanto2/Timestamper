@@ -1,4 +1,4 @@
-package com.example.android.timestamper;
+package com.example.android.audiohighlighter;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -7,28 +7,19 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.MainThread;
-import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,7 +28,7 @@ import java.util.Calendar;
 public class RecordAudioFragment extends Fragment {
 
     private View view;
-    private boolean isRecording;
+    private boolean isRecording, isPaused;
     private MediaRecorder audioRecorder;
     private File internalDirectory;
     private MainActivityInterface mainActivityInterface;
@@ -48,7 +39,7 @@ public class RecordAudioFragment extends Fragment {
     private Runnable timeTrackingRunnable;
     private int timeMillis;
     private View recordAudioButton;
-    private long startTime, currTime;
+    private long startTime, currTime, pauseTimeMillis;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -80,6 +71,7 @@ public class RecordAudioFragment extends Fragment {
 
         SetRecordAudioButtonListener();
         SetRecordTimestampButtonListener();
+        SetSaveRecordingButtonListener();
 
         return view;
     }
@@ -122,17 +114,22 @@ public class RecordAudioFragment extends Fragment {
         // Pause runnable until recording begins
         timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
         timeMillis = 0;
+
+        //ImageButton btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
+        //btn.setColorFilter(R.color.colorSlightlyGray);
     }
 
     private void RecordButtonPressed(){
-        if (!isRecording) {
+        if (!isRecording && !isPaused) {
             // Prepare media recorder and initialize/re-initialize variables properly
             InitializeAudioRecorder();
             isRecording = true;
             ImageButton btn = (ImageButton)recordAudioButton;
-            btn.setImageResource(R.drawable.ic_baseline_stop_24px);
+            btn.setImageResource(R.drawable.ic_baseline_mic_none_24px);
+            //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
+            //btn.setColorFilter(R.color.colorAccent);
             TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
-            text.setText("Stop");
+            text.setText("Pause");
             timeMillis = 0;
             timestamps.clear();
 
@@ -146,15 +143,50 @@ public class RecordAudioFragment extends Fragment {
             // Change from hard coded string
             Toast.makeText(view.getContext(), "Recording started.", Toast.LENGTH_SHORT).show();
         }
-        else{
-            StopRecording(true);
+        else if (isRecording && isPaused){
+            UnpauseRecording();
         }
+        else{
+            PauseRecording();
+            //StopRecording(true);
+        }
+    }
+
+    private void PauseRecording(){
+        isPaused = true;
+        ImageButton btn = (ImageButton)recordAudioButton;
+        btn.setImageResource(R.drawable.ic_baseline_mic_24px);
+        TextView text = view.findViewById(R.id.record_tip_text_view);
+        text.setText("Resume");
+        //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
+        //btn.setColorFilter(R.color.colorSlightlyGray);
+
+        pauseTimeMillis = SystemClock.uptimeMillis();
+
+        audioRecorder.pause();
+        timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
+    }
+
+    private void UnpauseRecording(){
+        isPaused = false;
+        ImageButton btn = (ImageButton)recordAudioButton;
+        btn.setImageResource(R.drawable.ic_baseline_mic_none_24px);
+        TextView text = view.findViewById(R.id.record_tip_text_view);
+        text.setText("Pause");
+        //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
+        //btn.setColorFilter(R.color.colorAccent);
+
+        pauseTimeMillis = SystemClock.uptimeMillis() - pauseTimeMillis;
+
+        audioRecorder.resume();
+        timeTrackingHandler.postDelayed(timeTrackingRunnable, 10);
     }
 
     public void StopRecording(Boolean manuallyEnded){
         if (isRecording) {
             // Set recording variables, pause runnable, stop recording
             isRecording = false;
+            isPaused = false;
             ImageButton btn = (ImageButton) recordAudioButton;
             btn.setImageResource(R.drawable.ic_baseline_mic_24px);
             TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
@@ -204,8 +236,8 @@ public class RecordAudioFragment extends Fragment {
     }
 
     private void RecordTimestampButtonPressed(){
-        if (isRecording) {
-            currTime = SystemClock.uptimeMillis() - startTime;
+        if (isRecording && !isPaused) {
+            currTime = SystemClock.uptimeMillis() - pauseTimeMillis - startTime;
             currTime -= getActivity().getPreferences(Context.MODE_PRIVATE).getInt("TimestampCushion", 0);
             if (currTime < 0)
                 currTime = 0;
@@ -231,6 +263,16 @@ public class RecordAudioFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 RecordTimestampButtonPressed();
+            }
+        });
+    }
+
+    private void SetSaveRecordingButtonListener(){
+        ImageButton saveRecordingBtn = view.findViewById(R.id.save_recording_btn);
+        saveRecordingBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                StopRecording(true);
             }
         });
     }

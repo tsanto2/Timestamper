@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.android.timestamper.MediaPlaybackFragment">
+    tools:context="com.example.android.audiohighlighter.MediaPlaybackFragment">
 
     <LinearLayout
         android:id="@+id/media_playback_frag_container"

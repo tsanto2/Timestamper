@@ -1,4 +1,4 @@
-package com.example.android.timestamper;
+package com.example.android.audiohighlighter;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

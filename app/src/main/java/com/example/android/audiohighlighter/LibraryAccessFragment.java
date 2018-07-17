@@ -1,4 +1,4 @@
-package com.example.android.timestamper;
+package com.example.android.audiohighlighter;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 

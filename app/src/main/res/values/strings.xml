@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Timestamper</string>
+    <string name="app_name">Audio Highlighter</string>
     <string name="play_btn_text">Play</string>
     <string name="pause_btn_text">Pause</string>
     <string name="mark_btn_text">Set Timestamp</string>

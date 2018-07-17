@@ -1,12 +1,10 @@
-package com.example.android.timestamper;
+package com.example.android.audiohighlighter;
 
 import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
-import android.drm.DrmStore;
 import android.media.MediaPlayer;
-import android.os.VibrationEffect;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -16,10 +14,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MainActivityInterface{
 
