@@ -1,30 +1,43 @@
 package com.example.android.audiohighlighter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class TimestampAdapter extends ArrayAdapter<Timestamp> {
 
+    private View listItemView;
+    private ArrayList<Timestamp> stamps;
+    private int pos;
+
     public TimestampAdapter(Activity context, ArrayList<Timestamp> timestamps){
         super(context, 0, timestamps);
+        if (timestamps.size() > 0)
+            stamps = timestamps;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
-        View listItemView = convertView;
+        pos = position;
+        listItemView = convertView;
 
         if (listItemView == null){
             listItemView = LayoutInflater.from(getContext()).inflate(
@@ -35,6 +48,8 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
 
         TextView stampTimeTextView = (TextView)listItemView.findViewById(R.id.timestamp_item_time_text_view);
         stampTimeTextView.setText(MediaPlaybackFragment.getTime(currentStamp.getCurrTime()));
+        TextView stampCommentTextView = listItemView.findViewById(R.id.timestamp_comment_text);
+        stampCommentTextView.setText(currentStamp.getTimestampComment());
 
         ImageView timestampImageView = listItemView.findViewById(R.id.timestamp_options_button_view);
         timestampImageView.setOnClickListener(new View.OnClickListener() {
@@ -56,8 +71,8 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
 
                             case R.id.timestamp_option_comment:
                                 Toast.makeText(getContext(), "EDITING COMMENT.", Toast.LENGTH_SHORT).show();
-                                /*AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle("Enter New Name");
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Enter New Comment:");
 
                                 // Set up the input
                                 final EditText input = new EditText(getContext());
@@ -66,22 +81,19 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
                                 builder.setView(input);
 
                                 // Set up the buttons
-                                builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                                builder.setPositiveButton("Save Comment", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        m_Text = input.getText().toString();
+                                        String m_Text = input.getText().toString();
+                                        currentStamp.SetTimestampComment(m_Text);
 
-                                        // TODO: Add check for already existing duplicate name
-                                        File file = new File(getContext().getFilesDir(), currentItem.getItemName()+".ogg");
-                                        File newFile = new File(getContext().getFilesDir(), m_Text + ".ogg");
-                                        file.renameTo(newFile);
-
-                                        file = new File(getContext().getFilesDir(), currentItem.getItemName()+".tds");
-                                        newFile = new File(getContext().getFilesDir(), m_Text + ".tds");
-                                        file.renameTo(newFile);
-
-                                        libraryItemNameTextView.setText(m_Text);
-                                        currentItem.setNewItemName(m_Text);
+                                        MainActivity activity = (MainActivity)getContext();
+                                        MediaPlaybackFragment mpFrag = (MediaPlaybackFragment)activity.getFragmentManager().findFragmentByTag("playback");
+                                        mpFrag.SetTimestamps(stamps);
+                                        mpFrag.SaveTimestamps();
+                                        mpFrag.timestampAdapter.notifyDataSetChanged();
+                                        //mpFrag.EditComment(pos, m_Text);
+                                        //mpFrag.SaveTimestamps();
                                     }
                                 });
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -91,7 +103,7 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
                                     }
                                 });
 
-                                builder.show();*/
+                                builder.show();
                                 return true;
 
                             case R.id.timestamp_option_toast:

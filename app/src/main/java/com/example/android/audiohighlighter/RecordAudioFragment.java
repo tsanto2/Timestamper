@@ -219,6 +219,8 @@ public class RecordAudioFragment extends Fragment {
                 // Add each stamp to json array
                 jsonArray.put(jObjIndex, stamp.getCurrTime());
                 jObjIndex++;
+                jsonArray.put(jObjIndex, "(Add comment...)");
+                jObjIndex++;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -243,7 +245,7 @@ public class RecordAudioFragment extends Fragment {
             currTime -= getActivity().getPreferences(Context.MODE_PRIVATE).getInt("TimestampCushion", 0);
             if (currTime < 0)
                 currTime = 0;
-            timestamps.add(new Timestamp((int) currTime));
+            timestamps.add(new Timestamp((int)currTime));
             Toast.makeText(view.getContext(), "Time added: " + Integer.toString(timeMillis), Toast.LENGTH_SHORT).show();
         }
     }

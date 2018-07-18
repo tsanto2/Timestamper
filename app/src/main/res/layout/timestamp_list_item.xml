@@ -38,16 +38,30 @@
                     android:layout_height="32dp"
                     android:scaleType="fitXY"/>
 
-                <TextView
-                    android:id="@+id/timestamp_item_time_text_view"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|end"
-                    android:paddingStart="10dp"
-                    android:textSize="12sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/colorAccent"
-                    tools:text="00:00:00"/>
+                    android:orientation="vertical"
+                    android:layout_gravity="center_vertical"
+                    android:paddingStart="10dp">
+
+                    <TextView
+                        android:id="@+id/timestamp_comment_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:text="(Add comment...)"
+                        android:textColor="@color/colorAccent"/>
+                    <TextView
+                        android:id="@+id/timestamp_item_time_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorAccent"
+                        tools:text="00:00:00"/>
+                </LinearLayout>
             </LinearLayout>
 
             <ImageView

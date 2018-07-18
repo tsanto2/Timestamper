@@ -46,7 +46,7 @@ public class MediaPlaybackFragment extends Fragment {
     private boolean seekBarTouched;
     public ImageButton playButton;
     private ArrayList<Timestamp> timestamps;
-    private TimestampAdapter timestampAdapter;
+    public TimestampAdapter timestampAdapter;
     private int playBtnImage = R.drawable.ic_baseline_play_circle_filled_24px;
     private int pauseBtnImage = R.drawable.ic_baseline_pause_circle_filled_24px;
     private static MediaPlaybackFragment fragment;
@@ -113,7 +113,8 @@ public class MediaPlaybackFragment extends Fragment {
                 JSONArray tempJson = new JSONArray(jsonString);
 
                 for (int i = 0; i < tempJson.length(); i++){
-                    timestamps.add(new Timestamp(tempJson.getInt(i)));
+                    timestamps.add(new Timestamp(tempJson.getInt(i), tempJson.getString(i + 1)));
+                    i++;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -302,38 +303,57 @@ public class MediaPlaybackFragment extends Fragment {
                 timestamps.add(new Timestamp(stampTime));
                 sortTimestamps();
                 timestampAdapter.notifyDataSetChanged();
-                FileOutputStream outputStream;
-
-                File oldFile = new File(getContext().getFilesDir(), tempFilePath + ".tds");
-                oldFile.delete();
-
-                // Create json array for saving array
-                JSONArray jsonArray = new JSONArray();
-                int jObjIndex = 0;
-                for (Timestamp stamp:
-                        timestamps) {
-                    try {
-                        // Add each stamp to json array
-                        jsonArray.put(jObjIndex, stamp.getCurrTime());
-                        jObjIndex++;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                // Convert json containing stamps to string so it can be saved
-                String json = jsonArray.toString();
-
-                // Save json string to file
-                try {
-                    outputStream = getContext().openFileOutput(tempFilePath + ".tds", Context.MODE_APPEND);
-                    outputStream.write(json.getBytes());
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                SaveTimestamps();
             }
         });
+    }
+
+    public ArrayList<Timestamp> GetTimestamps(){
+        return timestamps;
+    }
+
+    public void SetTimestamps(ArrayList<Timestamp> stamps){
+        timestamps = stamps;
+        sortTimestamps();
+    }
+
+    public void EditComment(int pos, String newComment){
+        timestamps.get(pos).SetTimestampComment(newComment);
+    }
+
+    public void SaveTimestamps(){
+        FileOutputStream outputStream;
+
+        File oldFile = new File(getContext().getFilesDir(), tempFilePath + ".tds");
+        oldFile.delete();
+
+        // Create json array for saving array
+        JSONArray jsonArray = new JSONArray();
+        int jObjIndex = 0;
+        for (Timestamp stamp:
+                timestamps) {
+            try {
+                // Add each stamp to json array
+                jsonArray.put(jObjIndex, stamp.getCurrTime());
+                jObjIndex++;
+                jsonArray.put(jObjIndex, stamp.getTimestampComment());
+                jObjIndex++;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Convert json containing stamps to string so it can be saved
+        String json = jsonArray.toString();
+
+        // Save json string to file
+        try {
+            outputStream = getContext().openFileOutput(tempFilePath + ".tds", Context.MODE_APPEND);
+            outputStream.write(json.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void sortTimestamps(){
