@@ -1,21 +1,26 @@
 package com.example.android.audiohighlighter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,6 +45,7 @@ public class RecordAudioFragment extends Fragment {
     private int timeMillis;
     private View recordAudioButton;
     private long startTime, currTime, pauseStartTime, pauseTimeMillis;
+    private String newTitle;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -72,15 +78,20 @@ public class RecordAudioFragment extends Fragment {
         SetRecordAudioButtonListener();
         SetRecordTimestampButtonListener();
         SetSaveRecordingButtonListener();
+        SetTitleTextTouchedListener();
 
         return view;
     }
 
     //TODO: Fix file types, path, and encoding
     private void InitializeAudioRecorder(){
+        newTitle = null;
         // Use time/date for temporary recording name
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
         tempFilePrefix = df.format(Calendar.getInstance().getTime());
+
+        TextView tv = view.findViewById(R.id.record_screen_title_text);
+        tv.setText(tempFilePrefix);
 
         // Create file for output with proper name
         File newFile = new File(internalDirectory, tempFilePrefix + ".ogg");
@@ -186,6 +197,8 @@ public class RecordAudioFragment extends Fragment {
 
     public void StopRecording(Boolean manuallyEnded){
         if (isRecording) {
+            TextView tv = view.findViewById(R.id.record_screen_title_text);
+            tv.setText("Start Recording");
             // Set recording variables, pause runnable, stop recording
             isRecording = false;
             isPaused = false;
@@ -207,7 +220,16 @@ public class RecordAudioFragment extends Fragment {
 
     private void SaveRecording(){
         // Create filename for timestamp list with same prefix as audio
+        if (newTitle != null){
+            File file = new File(getContext().getFilesDir(), tempFilePrefix + ".ogg");
+            File newFile = new File(getContext().getFilesDir(), newTitle + ".ogg");
+            file.renameTo(newFile);
+
+            tempFilePrefix = newTitle;
+        }
+
         String filename = tempFilePrefix + ".tds";
+
         FileOutputStream outputStream;
 
         // Create json array for saving array
@@ -277,6 +299,45 @@ public class RecordAudioFragment extends Fragment {
             @Override
             public void onClick(View view){
                 StopRecording(true);
+            }
+        });
+    }
+
+    private void SetTitleTextTouchedListener(){
+        TextView titleTextView = view.findViewById(R.id.record_screen_title_text);
+        titleTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if (isRecording) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Enter New Title:");
+
+                    // Set up the input
+                    final EditText input = new EditText(getContext());
+                    // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    builder.setView(input);
+
+                    // Set up the buttons
+                    builder.setPositiveButton("Confirm Change", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String m_Text = input.getText().toString();
+                            newTitle = m_Text;
+
+                            TextView tv = getView().findViewById(R.id.record_screen_title_text);
+                            tv.setText(m_Text);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+                }
             }
         });
     }
