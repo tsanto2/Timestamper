@@ -93,9 +93,14 @@ public class RecordAudioFragment extends Fragment {
         TextView tv = view.findViewById(R.id.record_screen_title_text);
         tv.setText(tempFilePrefix);
 
+        TextView tv2 = view.findViewById(R.id.storage_space_text);
+        long freeSpace = internalDirectory.getFreeSpace();
+        //float freeSpaceGB = freeSpace / 1073741824;
+        float freeSpaceMB = freeSpace / 1048576;
+        tv2.setText(Float.toString(freeSpaceMB));
+
         // Create file for output with proper name
         File newFile = new File(internalDirectory, tempFilePrefix + ".ogg");
-
         temporaryAudioFilePath = newFile.getAbsolutePath();
 
         audioRecorder = new MediaRecorder();

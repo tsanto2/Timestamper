@@ -31,11 +31,37 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="(Tap title while recording to change it.)"
-            android:layout_marginBottom="100dp"
             android:textStyle="italic"
             android:textSize="12sp"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Storage space available (MB): "
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/storage_space_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="69"
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/record_view_buttons_parent_layout"
