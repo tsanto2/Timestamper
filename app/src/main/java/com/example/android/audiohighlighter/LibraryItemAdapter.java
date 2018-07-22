@@ -92,17 +92,22 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                     public void onClick(DialogInterface dialog, int which) {
                                         m_Text = input.getText().toString();
 
-                                        // TODO: Add check for already existing duplicate name
-                                        File file = new File(getContext().getFilesDir(), currentItem.getItemName()+".ogg");
-                                        File newFile = new File(getContext().getFilesDir(), m_Text + ".ogg");
-                                        file.renameTo(newFile);
+                                        if(!m_Text.contains("") && m_Text != "" && m_Text != null) {
+                                            // TODO: Add check for already existing duplicate name
+                                            File file = new File(getContext().getFilesDir(), currentItem.getItemName() + ".ogg");
+                                            File newFile = new File(getContext().getFilesDir(), m_Text + ".ogg");
+                                            file.renameTo(newFile);
 
-                                        file = new File(getContext().getFilesDir(), currentItem.getItemName()+".tds");
-                                        newFile = new File(getContext().getFilesDir(), m_Text + ".tds");
-                                        file.renameTo(newFile);
+                                            file = new File(getContext().getFilesDir(), currentItem.getItemName() + ".tds");
+                                            newFile = new File(getContext().getFilesDir(), m_Text + ".tds");
+                                            file.renameTo(newFile);
 
-                                        libraryItemNameTextView.setText(m_Text);
-                                        currentItem.setNewItemName(m_Text);
+                                            libraryItemNameTextView.setText(m_Text);
+                                            currentItem.setNewItemName(m_Text);
+                                        }
+                                        else{
+                                            Toast.makeText(getContext(), "ILLEGAL FILE NAME.", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

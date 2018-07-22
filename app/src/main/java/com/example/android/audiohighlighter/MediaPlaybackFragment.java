@@ -313,8 +313,10 @@ public class MediaPlaybackFragment extends Fragment {
     }
 
     public void SetTimestamps(ArrayList<Timestamp> stamps){
-        timestamps = stamps;
-        sortTimestamps();
+        if(stamps != null)
+            timestamps = stamps;
+        if (timestamps.size() > 1)
+            sortTimestamps();
     }
 
     public void EditComment(int pos, String newComment){
