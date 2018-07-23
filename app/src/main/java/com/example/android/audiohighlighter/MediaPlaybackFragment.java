@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ public class MediaPlaybackFragment extends Fragment {
     private static MediaPlaybackFragment fragment;
     private ListView listView;
     private String tempFilePath;
+    private int recordingDuration;
 
     public static MediaPlaybackFragment newInstance(){
         fragment = new MediaPlaybackFragment();
@@ -112,7 +114,11 @@ public class MediaPlaybackFragment extends Fragment {
             try {
                 JSONArray tempJson = new JSONArray(jsonString);
 
-                for (int i = 0; i < tempJson.length(); i++){
+                recordingDuration = tempJson.getInt(0);
+                TextView durationText = view.findViewById(R.id.duration_text_view);
+                durationText.setText(getTime(recordingDuration));
+
+                for (int i = 1; i < tempJson.length(); i++){
                     timestamps.add(new Timestamp(tempJson.getInt(i), tempJson.getString(i + 1)));
                     i++;
                 }
@@ -331,7 +337,13 @@ public class MediaPlaybackFragment extends Fragment {
 
         // Create json array for saving array
         JSONArray jsonArray = new JSONArray();
-        int jObjIndex = 0;
+        try {
+            jsonArray.put(0, recordingDuration);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        int jObjIndex = 1;
         for (Timestamp stamp:
                 timestamps) {
             try {

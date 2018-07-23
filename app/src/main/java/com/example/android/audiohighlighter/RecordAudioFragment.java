@@ -229,10 +229,11 @@ public class RecordAudioFragment extends Fragment {
             TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
             text.setText("Record");
             timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
-            startTime = 0;
             audioRecorder.stop();
 
             SaveRecording();
+
+            startTime = 0;
 
             // Change from hard coded string
             if (manuallyEnded)
@@ -256,7 +257,15 @@ public class RecordAudioFragment extends Fragment {
 
         // Create json array for saving array
         JSONArray jsonArray = new JSONArray();
-        int jObjIndex = 0;
+
+        int time = (int)(SystemClock.uptimeMillis() - pauseTimeMillis - startTime);
+        try {
+            jsonArray.put(0, time);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        int jObjIndex = 1;
         for (Timestamp stamp:
                 timestamps) {
             try {

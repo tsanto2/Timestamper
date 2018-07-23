@@ -50,16 +50,39 @@
                 android:progressTint="@color/colorAccent"
                 android:progressBackgroundTint="@color/colorSlightlyGray"/>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/seekbar_view">
+
             <TextView
                 android:id="@+id/curr_time_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/seekbar_view"
                 android:paddingBottom="16dp"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:textColor="@color/colorAccent"
                 android:text="00:00:00"/>
+
+            <TextView
+                android:id="@+id/slash_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:text=" / "/>
+
+            <TextView
+                android:id="@+id/duration_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:text="00:00:00"/>
+            </LinearLayout>
 
         </RelativeLayout>
 
