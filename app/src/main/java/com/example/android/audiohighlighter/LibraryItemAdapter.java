@@ -92,7 +92,7 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                     public void onClick(DialogInterface dialog, int which) {
                                         m_Text = input.getText().toString();
 
-                                        if(!m_Text.contains("") && m_Text != "" && m_Text != null) {
+                                        if(m_Text.length() > 0 && m_Text != null) {
                                             // TODO: Add check for already existing duplicate name
                                             File file = new File(getContext().getFilesDir(), currentItem.getItemName() + ".ogg");
                                             File newFile = new File(getContext().getFilesDir(), m_Text + ".ogg");

@@ -30,11 +30,13 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
             android:text="(Tap title while recording to change it.)"
             android:textStyle="italic"
             android:textSize="12sp"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +58,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
                 android:text="69"
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Current recording length: "
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/recording_length_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="00:00:00"
                 android:textStyle="italic"
                 android:textSize="12sp"
                 android:textAlignment="center"

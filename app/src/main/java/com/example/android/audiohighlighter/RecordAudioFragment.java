@@ -37,6 +37,7 @@ public class RecordAudioFragment extends Fragment {
     private MediaRecorder audioRecorder;
     private File internalDirectory;
     private MainActivityInterface mainActivityInterface;
+    private MediaPlaybackFragment playbackFrag;
     private String temporaryAudioFilePath;
     private String tempFilePrefix;
     private ArrayList<Timestamp> timestamps;
@@ -75,6 +76,13 @@ public class RecordAudioFragment extends Fragment {
         internalDirectory = getContext().getFilesDir();
         timestamps = new ArrayList<>();
 
+        playbackFrag = (MediaPlaybackFragment)getActivity().getFragmentManager().findFragmentByTag("playback");
+
+        TextView tv2 = view.findViewById(R.id.storage_space_text);
+        long freeSpace = internalDirectory.getFreeSpace();
+        float freeSpaceMB = freeSpace / 1048576;
+        tv2.setText(Float.toString(freeSpaceMB));
+
         SetRecordAudioButtonListener();
         SetRecordTimestampButtonListener();
         SetSaveRecordingButtonListener();
@@ -95,7 +103,6 @@ public class RecordAudioFragment extends Fragment {
 
         TextView tv2 = view.findViewById(R.id.storage_space_text);
         long freeSpace = internalDirectory.getFreeSpace();
-        //float freeSpaceGB = freeSpace / 1073741824;
         float freeSpaceMB = freeSpace / 1048576;
         tv2.setText(Float.toString(freeSpaceMB));
 
@@ -123,6 +130,16 @@ public class RecordAudioFragment extends Fragment {
             @Override
             public void run() {
                 timeMillis += 10;
+
+                TextView tv2 = view.findViewById(R.id.storage_space_text);
+                long freeSpace = internalDirectory.getFreeSpace();
+                float freeSpaceMB = freeSpace / 1048576;
+                tv2.setText(Float.toString(freeSpaceMB));
+
+                TextView recLength = view.findViewById(R.id.recording_length_text);
+                int time = (int)(SystemClock.uptimeMillis() - pauseTimeMillis - startTime);
+                recLength.setText(playbackFrag.getTime(time));
+
                 timeTrackingHandler.postDelayed(this, 10);
             }
         };
