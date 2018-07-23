@@ -8,9 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -82,10 +89,38 @@ public class LibraryAccessFragment extends Fragment{
 
             // If String is not in set, add it to the list and the set.
             if (!set.contains(name)) {
-                libraryItems.add(new LibraryItem(name));
+                libraryItems.add(new LibraryItem(name, GetItemDuration(name)));
                 set.add(name);
             }
         }
+    }
+
+    private int GetItemDuration(String fileName){
+        StringBuffer stringBuffer = new StringBuffer();
+
+        try {
+            BufferedReader inputReader = new BufferedReader(new
+                    InputStreamReader(getContext().openFileInput(fileName + ".tds")));
+            String inputString;
+
+            while ((inputString = inputReader.readLine()) != null) {
+                stringBuffer.append(inputString);
+            }
+
+            String jsonString = stringBuffer.toString();
+
+            try {
+                JSONArray tempJson = new JSONArray(jsonString);
+
+                return(tempJson.getInt(0));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     public void RefreashLibraryItemAdapter(){

@@ -48,6 +48,13 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
         final TextView libraryItemNameTextView = listItemView.findViewById(R.id.library_item_name_text_view);
         libraryItemNameTextView.setText(currentItem.getItemName());
 
+        TextView itemDurationTextView = listItemView.findViewById(R.id.library_item_duration_text_view);
+        int temp = currentItem.GetItemDuration();
+        MainActivity activity = (MainActivity)getContext();
+        MediaPlaybackFragment playbackFrag = (MediaPlaybackFragment)activity.getFragmentManager().findFragmentByTag("playback");
+        String time = playbackFrag.getTime(temp);
+        itemDurationTextView.setText(time);
+
         ImageView libraryItemImageView = listItemView.findViewById(R.id.library_item_options_button_view);
         libraryItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override

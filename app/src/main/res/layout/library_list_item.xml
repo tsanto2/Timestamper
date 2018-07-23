@@ -39,16 +39,33 @@
                     android:layout_height="32dp"
                     android:scaleType="fitXY"/>
 
-                <TextView
-                    android:id="@+id/library_item_name_text_view"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:paddingLeft="10dp"
-                    android:textSize="16sp"
-                    android:textStyle="italic"
-                    android:textColor="@color/colorAccent"
-                    tools:text="00:00:00"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/library_item_name_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorAccent"
+                        tools:text="00:00:00"/>
+
+                    <TextView
+                        android:id="@+id/library_item_duration_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorAccent"
+                        tools:text="00:00:00"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <ImageView
