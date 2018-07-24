@@ -5,11 +5,16 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.media.MediaRecorder;
+import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +46,14 @@ public class RecordAudioFragment extends Fragment {
     private String temporaryAudioFilePath;
     private String tempFilePrefix;
     private ArrayList<Timestamp> timestamps;
-    private Handler timeTrackingHandler;
-    private Runnable timeTrackingRunnable;
+    private Handler timeTrackingHandler, visualizerHandler;
+    private Runnable timeTrackingRunnable, visualizerRunnable;
     private int timeMillis;
     private View recordAudioButton;
     private long startTime, currTime, pauseStartTime, pauseTimeMillis;
     private String newTitle;
+
+    private Canvas waveformCanvas;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -87,6 +94,8 @@ public class RecordAudioFragment extends Fragment {
         SetRecordTimestampButtonListener();
         SetSaveRecordingButtonListener();
         SetTitleTextTouchedListener();
+
+        waveformCanvas = new Canvas();
 
         return view;
     }
@@ -147,9 +156,6 @@ public class RecordAudioFragment extends Fragment {
         // Pause runnable until recording begins
         timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
         timeMillis = 0;
-
-        //ImageButton btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
-        //btn.setColorFilter(R.color.colorSlightlyGray);
     }
 
     private void RecordButtonPressed(){
@@ -159,8 +165,7 @@ public class RecordAudioFragment extends Fragment {
             isRecording = true;
             ImageButton btn = (ImageButton)recordAudioButton;
             btn.setImageResource(R.drawable.ic_baseline_mic_none_24px);
-            //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
-            //btn.setColorFilter(R.color.colorAccent);
+
             TextView text = (TextView)view.findViewById(R.id.record_tip_text_view);
             text.setText("Pause");
             timeMillis = 0;
@@ -192,11 +197,8 @@ public class RecordAudioFragment extends Fragment {
         btn.setImageResource(R.drawable.ic_baseline_mic_24px);
         TextView text = view.findViewById(R.id.record_tip_text_view);
         text.setText("Resume");
-        //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
-        //btn.setColorFilter(R.color.colorSlightlyGray);
 
         pauseStartTime = SystemClock.uptimeMillis();
-        //pauseTimeMillis += SystemClock.uptimeMillis();
 
         audioRecorder.pause();
         timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
@@ -208,8 +210,6 @@ public class RecordAudioFragment extends Fragment {
         btn.setImageResource(R.drawable.ic_baseline_mic_none_24px);
         TextView text = view.findViewById(R.id.record_tip_text_view);
         text.setText("Pause");
-        //btn = (ImageButton)view.findViewById(R.id.record_timestamp_btn);
-        //btn.setColorFilter(R.color.colorAccent);
 
         pauseTimeMillis = SystemClock.uptimeMillis() - pauseStartTime + pauseTimeMillis;
 

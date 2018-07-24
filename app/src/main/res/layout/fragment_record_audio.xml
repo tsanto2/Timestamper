@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:paddingBottom="100dp"
         android:orientation="vertical">
 
         <TextView
@@ -30,7 +31,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="50dp"
             android:text="(Tap title while recording to change it.)"
             android:textStyle="italic"
             android:textSize="12sp"
@@ -38,67 +39,10 @@
             android:textColor="@color/colorAccent"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Storage space available (MB): "
-                android:textStyle="italic"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"/>
-
-            <TextView
-                android:id="@+id/storage_space_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:text="69"
-                android:textStyle="italic"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="40dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Current recording length: "
-                android:textStyle="italic"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"/>
-
-            <TextView
-                android:id="@+id/recording_length_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="00:00:00"
-                android:textStyle="italic"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"/>
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/record_view_buttons_parent_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
             android:orientation="horizontal"
             android:padding="12dp">
 
@@ -126,7 +70,6 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="64dp"
                     android:text="Save Recording"
                     android:textAlignment="center"
                     android:textColor="@color/colorAccent"
@@ -158,7 +101,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="64dp"
                     android:text="Record"
                     android:textColor="@color/colorAccent"
                     android:textSize="10sp"/>
@@ -187,12 +129,69 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"
-                android:layout_marginBottom="64dp"
                 android:text="Add Timestamp"
                 android:textColor="@color/colorAccent"
                 android:textSize="10sp"/>
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Current recording length: "
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/recording_length_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="00:00:00"
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Storage space available (MB): "
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/storage_space_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="69"
+                android:textStyle="italic"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
