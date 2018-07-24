@@ -3,19 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.audiohighlighter.LibraryAccessFragment">
+    tools:context="com.example.android.audiohighlighter.LibraryAccessFragment"
+    android:background="@drawable/bg_gradient"
+    android:layout_marginBottom="55dp">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="boobos"/>
+        android:id="@+id/empty_library_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="No recordings in library..."
+        android:textColor="@color/colorAccent"
+        android:textStyle="italic"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="55dp"
-        android:layout_weight="1"
-        android:background="@drawable/bg_gradient">
+        android:layout_weight="1">
 
         <ListView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"

@@ -54,6 +54,11 @@ public class LibraryAccessFragment extends Fragment{
 
         SetUpArrayAdapter();
 
+        if (libraryItems.size() > 0){
+            TextView tv = view.findViewById(R.id.empty_library_text);
+            tv.setVisibility(View.INVISIBLE);
+        }
+
         return view;
     }
 
@@ -93,6 +98,16 @@ public class LibraryAccessFragment extends Fragment{
                 set.add(name);
             }
         }
+
+        TextView tv = view.findViewById(R.id.empty_library_text);
+
+        if (libraryItems.size() > 0){
+            //TODO: Add TextView stating no recordings exist
+            tv.setVisibility(View.INVISIBLE);
+        }
+        else{
+            tv.setVisibility(View.VISIBLE);
+        }
     }
 
     private int GetItemDuration(String fileName){
@@ -125,8 +140,15 @@ public class LibraryAccessFragment extends Fragment{
 
     public void RefreashLibraryItemAdapter(){
         libraryItemAdapter.notifyDataSetChanged();
-        if (libraryItems.size() == 0){
+
+        TextView tv = view.findViewById(R.id.empty_library_text);
+
+        if (libraryItems.size() > 0){
             //TODO: Add TextView stating no recordings exist
+            tv.setVisibility(View.INVISIBLE);
+        }
+        else{
+            tv.setVisibility(View.VISIBLE);
         }
     }
 
