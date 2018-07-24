@@ -4,7 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.android.audiohighlighter.MediaPlaybackFragment">
+    tools:context="com.example.android.audiohighlighter.MediaPlaybackFragment"
+    android:background="@drawable/bg_gradient">
+
+    <TextView
+        android:id="@+id/empty_stamp_list_text"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textAlignment="center"
+        android:text="Tap the Plus Button below to add a timestamp..."
+        android:textColor="@color/colorAccent"
+        android:textStyle="italic"/>
 
     <LinearLayout
         android:id="@+id/media_playback_frag_container"
@@ -89,8 +101,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bg_gradient">
+            android:layout_weight="1">
 
             <ListView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"

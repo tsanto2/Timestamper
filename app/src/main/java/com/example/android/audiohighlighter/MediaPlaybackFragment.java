@@ -306,7 +306,7 @@ public class MediaPlaybackFragment extends Fragment {
                 listView.findViewById(R.id.timestamp_list).setVisibility(View.VISIBLE);
 
                 // Add timestamp to arraylist
-                timestamps.add(new Timestamp(stampTime));
+                timestamps.add(new Timestamp(stampTime, "(Add comment...)"));
                 sortTimestamps();
                 timestampAdapter.notifyDataSetChanged();
                 SaveTimestamps();
@@ -323,6 +323,15 @@ public class MediaPlaybackFragment extends Fragment {
             timestamps = stamps;
         if (timestamps.size() > 1)
             sortTimestamps();
+
+        TextView tv = view.findViewById(R.id.empty_stamp_list_text);
+
+        if (timestamps.size() > 0){
+            tv.setVisibility(View.INVISIBLE);
+        }
+        else {
+            tv.setVisibility(View.VISIBLE);
+        }
     }
 
     public void EditComment(int pos, String newComment){
@@ -378,6 +387,15 @@ public class MediaPlaybackFragment extends Fragment {
                 return lhs.getCurrTime() < rhs.getCurrTime() ? -1 : (lhs.getCurrTime() > rhs.getCurrTime()) ? 1 : 0;
             }
         });
+
+        TextView tv = view.findViewById(R.id.empty_stamp_list_text);
+
+        if (timestamps.size() > 0){
+            tv.setVisibility(View.INVISIBLE);
+        }
+        else {
+            tv.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setNextTimestampNavButtonListener(){

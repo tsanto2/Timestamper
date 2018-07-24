@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class TimestampAdapter extends ArrayAdapter<Timestamp> {
@@ -26,16 +27,18 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
     private View listItemView;
     private ArrayList<Timestamp> stamps;
     private int pos;
+    private TimestampAdapter thisAdapter;
 
     public TimestampAdapter(Activity context, ArrayList<Timestamp> timestamps){
         super(context, 0, timestamps);
+        thisAdapter = this;
         if (timestamps.size() > 0)
             stamps = timestamps;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent){
         pos = position;
         listItemView = convertView;
 
@@ -66,6 +69,16 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
                             case R.id.timestamp_option_delete:
                                 // TODO: Implement this
                                 Toast.makeText(getContext(), "DELETING TIMESTAMP.", Toast.LENGTH_SHORT).show();
+
+                                if (getItem(position) != null)
+                                    stamps.remove(getItem(position));
+
+                                MainActivity activity = (MainActivity)getContext();
+                                MediaPlaybackFragment mpFrag = (MediaPlaybackFragment)activity.getFragmentManager().findFragmentByTag("playback");
+                                mpFrag.SetTimestamps(stamps);
+                                mpFrag.SaveTimestamps();
+                                mpFrag.timestampAdapter.notifyDataSetChanged();
+
 
                                 return true;
 
