@@ -4,6 +4,4 @@
         android:title="Rename" />
     <item android:id="@+id/item_option_delete"
         android:title="Delete" />
-    <item android:id="@+id/item_option_toast"
-        android:title="Toast" />
 </menu>

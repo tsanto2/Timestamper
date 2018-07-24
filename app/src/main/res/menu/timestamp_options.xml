@@ -4,6 +4,4 @@
         android:title="Edit Comment" />
     <item android:id="@+id/timestamp_option_delete"
         android:title="Delete" />
-    <item android:id="@+id/timestamp_option_toast"
-        android:title="Toast" />
 </menu>

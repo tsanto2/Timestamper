@@ -90,7 +90,7 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                 // Set up the input
                                 final EditText input = new EditText(getContext());
                                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                                input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                                 builder.setView(input);
 
                                 // Set up the buttons
@@ -125,11 +125,6 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                 });
 
                                 builder.show();
-                                return true;
-
-                            case R.id.item_option_toast:
-                                // This is just for testing
-                                Toast.makeText(getContext(), currentItem.getItemName(), Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
                                 return false;

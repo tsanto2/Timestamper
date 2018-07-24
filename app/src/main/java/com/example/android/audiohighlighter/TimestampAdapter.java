@@ -105,11 +105,6 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
 
                                 builder.show();
                                 return true;
-
-                            case R.id.timestamp_option_toast:
-                                // This is just for testing
-                                Toast.makeText(getContext(), Integer.toString(currentStamp.getCurrTime()), Toast.LENGTH_SHORT).show();
-                                return true;
                             default:
                                 return false;
                         }
