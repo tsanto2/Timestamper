@@ -238,6 +238,11 @@ public class RecordAudioFragment extends Fragment {
             // Change from hard coded string
             if (manuallyEnded)
                 mainActivityInterface.SwitchToFragment(tempFilePrefix);
+
+            else{
+                LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)getFragmentManager().findFragmentByTag("library");
+                tempLibFrag.RefreashLibraryItemAdapter();
+            }
         }
     }
 
