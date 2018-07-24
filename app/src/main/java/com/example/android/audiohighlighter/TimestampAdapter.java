@@ -64,10 +64,8 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
                 // Setup menu item selection
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        // TODO: Add menu item for adding description/comment for timestamp
                         switch (item.getItemId()) {
                             case R.id.timestamp_option_delete:
-                                // TODO: Implement this
                                 Toast.makeText(getContext(), "DELETING TIMESTAMP.", Toast.LENGTH_SHORT).show();
 
                                 if (getItem(position) != null)

@@ -46,6 +46,7 @@
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textSize="20sp"
+                android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorAccent"/>
 

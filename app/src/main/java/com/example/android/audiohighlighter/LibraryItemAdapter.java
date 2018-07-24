@@ -65,7 +65,6 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                 // Setup menu item selection
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        // TODO: Add menu item for adding description/comment for timestamp
                         switch (item.getItemId()) {
                             case R.id.item_option_delete:
                                 // TODO: Create pop-up dialogue to check if user actually wants to delete

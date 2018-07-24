@@ -41,7 +41,6 @@ public class SettingsFragment extends Fragment {
         cushionView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                // TODO: Implement function to set cushion for timestamping
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Enter New Cushion Value:");
 

@@ -102,7 +102,6 @@ public class LibraryAccessFragment extends Fragment{
         TextView tv = view.findViewById(R.id.empty_library_text);
 
         if (libraryItems.size() > 0){
-            //TODO: Add TextView stating no recordings exist
             tv.setVisibility(View.INVISIBLE);
         }
         else{
@@ -144,7 +143,6 @@ public class LibraryAccessFragment extends Fragment{
         TextView tv = view.findViewById(R.id.empty_library_text);
 
         if (libraryItems.size() > 0){
-            //TODO: Add TextView stating no recordings exist
             tv.setVisibility(View.INVISIBLE);
         }
         else{

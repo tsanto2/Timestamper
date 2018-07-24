@@ -296,11 +296,6 @@ public class MediaPlaybackFragment extends Fragment {
         setTimestampButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Adjust stampTimeCushion depending on what feels "right"
-                // This variable is used to compensate for user pressing button after intended mark
-                // location.
-                // TODO: Make cushion user defined setting
-                //int stampTime = mMediaPlayer.getCurrentPosition() - stampTimeCushion;
                 int stampTime = mMediaPlayer.getCurrentPosition();
 
                 listView.findViewById(R.id.timestamp_list).setVisibility(View.VISIBLE);
@@ -399,7 +394,6 @@ public class MediaPlaybackFragment extends Fragment {
     }
 
     private void setNextTimestampNavButtonListener(){
-        // TODO: Make this easier to use. Buttons for each stamp?
         ImageButton nextTimestampButton = view.findViewById(R.id.nextstamp_button_view);
 
         nextTimestampButton.setOnClickListener(new View.OnClickListener() {
