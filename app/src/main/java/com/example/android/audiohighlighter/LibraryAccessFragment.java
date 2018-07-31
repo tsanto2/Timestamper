@@ -11,6 +11,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -29,6 +32,7 @@ public class LibraryAccessFragment extends Fragment{
     private ListView listView;
     private View view;
     private File dataDir;
+    private boolean isPremium = false;
 
     public static LibraryAccessFragment newInstance(){
         LibraryAccessFragment fragment = new LibraryAccessFragment();
@@ -43,6 +47,15 @@ public class LibraryAccessFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.fragment_access_library, container, false);
+
+        AdView bannerAdView = view.findViewById(R.id.adView);
+        if (!isPremium) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            bannerAdView.loadAd(adRequest);
+        }
+        else{
+            bannerAdView.setVisibility(View.GONE);
+        }
 
         // List of saved audio+timestamp items in library
         libraryItems = new ArrayList<>();

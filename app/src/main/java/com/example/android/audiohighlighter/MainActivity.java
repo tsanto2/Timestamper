@@ -14,8 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity implements MainActivityInterface{
+
+    private String adMobAppID = "ca-app-pub-9485517543167139~7756344909";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private boolean permissionToRecordAccepted = false;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MobileAds.initialize(this, adMobAppID);
 
         CreateFragments();
         SetupActionBar();

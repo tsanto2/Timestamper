@@ -22,23 +22,40 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/library_list"
-            android:orientation="vertical"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:stackFromBottom="false"
-            android:clipToPadding="false"
-            android:clipChildren="false"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:fadeScrollbars="true"
-            android:scrollbarDefaultDelayBeforeFade="500"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="16sp"
-            android:layout_gravity="center_horizontal|top"
-            tools:context=".LibraryAccessFragment"/>
+            android:orientation="vertical">
+
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+            </com.google.android.gms.ads.AdView>
+
+            <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/library_list"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:stackFromBottom="false"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:fadeScrollbars="true"
+                android:scrollbarDefaultDelayBeforeFade="500"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="16sp"
+                android:layout_gravity="center_horizontal|top"
+                tools:context=".LibraryAccessFragment"/>
+        </LinearLayout>
 
     </FrameLayout>
 
