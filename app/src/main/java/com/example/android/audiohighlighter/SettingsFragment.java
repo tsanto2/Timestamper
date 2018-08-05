@@ -1,6 +1,7 @@
 package com.example.android.audiohighlighter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,10 +12,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.Integer.parseInt;
 
 public class SettingsFragment extends Fragment {
+
+    private View view;
 
     private int stampCushion;
     private SharedPreferences sharedPreferences;
@@ -31,8 +42,44 @@ public class SettingsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        view = inflater.inflate(R.layout.fragment_settings, container, false);
         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+
+        SetTimestampCushionSettingListener();
+
+        SetAudioSampleRateSettingListener();
+
+        return view;
+    }
+
+    private void SetAudioSampleRateSettingListener(){
+        TextView tv = view.findViewById(R.id.sample_rate_setting_text_view);
+        tv.setText(Integer.toString(sharedPreferences.getInt("AudioSampleRate", 16)) + " kHz");
+
+        RelativeLayout cushionView = view.findViewById(R.id.sample_rate_setting_parent_view);
+        cushionView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                final String list[] = {"48kHz", "44kHz", "32kHz", "22kHz", "16kHz", "8kHz"};
+
+                AlertDialog.Builder alt_bld = new AlertDialog.Builder(getContext());
+                alt_bld.setTitle("Select New Sample Rate:");
+                alt_bld.setSingleChoiceItems(list, -1, new DialogInterface
+                        .OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        Toast.makeText(getContext(), "New Sample Rate: " + list[item], Toast.LENGTH_SHORT).show();
+                        UpdateSampleRateSetting(list[item]);
+                        dialog.dismiss();// dismiss the alertbox after chose option
+
+                    }
+                });
+                AlertDialog alert = alt_bld.create();
+                alert.show();
+            }
+        });
+    }
+
+    private void SetTimestampCushionSettingListener(){
 
         TextView tv = view.findViewById(R.id.cushion_setting_text_view);
         tv.setText(Integer.toString(sharedPreferences.getInt("TimestampCushion", 0)) + " ms");
@@ -42,7 +89,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Enter New Cushion Value:");
+                builder.setTitle("Timestamp saved this amount of time before button press.");
 
                 final View vFinal = v;
 
@@ -56,7 +103,7 @@ public class SettingsFragment extends Fragment {
                 builder.setPositiveButton("Save Cushion", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        stampCushion = Integer.parseInt(input.getText().toString());
+                        stampCushion = parseInt(input.getText().toString());
 
                         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -69,15 +116,28 @@ public class SettingsFragment extends Fragment {
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       dialog.cancel();
+                        dialog.cancel();
                     }
                 });
 
                 builder.show();
             }
         });
+    }
 
-        return view;
+    private void UpdateSampleRateSetting(String selection){
+        for (int i = 0; i < 3; i++){
+            selection = selection.substring(0, selection.length() - 1);
+        }
+
+        int newSampleRate = Integer.parseInt(selection);
+
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("AudioSampleRate", newSampleRate);
+        editor.commit();
+        TextView tv = view.findViewById(R.id.sample_rate_setting_text_view);
+        tv.setText(Integer.toString(newSampleRate)+" kHz");
     }
 
 }

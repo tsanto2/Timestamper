@@ -53,7 +53,7 @@ public class RecordAudioFragment extends Fragment {
     private long startTime, currTime, pauseStartTime, pauseTimeMillis;
     private String newTitle;
 
-    private Canvas waveformCanvas;
+    private int sampleRate;
 
     public static RecordAudioFragment newInstance(){
         RecordAudioFragment fragment = new RecordAudioFragment();
@@ -95,14 +95,14 @@ public class RecordAudioFragment extends Fragment {
         SetSaveRecordingButtonListener();
         SetTitleTextTouchedListener();
 
-        waveformCanvas = new Canvas();
-
         return view;
     }
 
     //TODO: Fix file types, path, and encoding
     private void InitializeAudioRecorder(){
         newTitle = null;
+
+
         // Use time/date for temporary recording name
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
         tempFilePrefix = df.format(Calendar.getInstance().getTime());
@@ -125,6 +125,8 @@ public class RecordAudioFragment extends Fragment {
         audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         audioRecorder.setOutputFile(temporaryAudioFilePath);
         audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        sampleRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioSampleRate", 16);
+        audioRecorder.setAudioSamplingRate(sampleRate);
 
         try {
             audioRecorder.prepare();
