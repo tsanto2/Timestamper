@@ -127,6 +127,8 @@ public class RecordAudioFragment extends Fragment {
         audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         sampleRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioSampleRate", 16);
         audioRecorder.setAudioSamplingRate(sampleRate);
+        int bitRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioBitRate", 24);
+        audioRecorder.setAudioEncodingBitRate(bitRate);
 
         try {
             audioRecorder.prepare();

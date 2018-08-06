@@ -49,15 +49,44 @@ public class SettingsFragment extends Fragment {
 
         SetAudioSampleRateSettingListener();
 
+        SetAudioBitRateSettingListener();
+
         return view;
+    }
+
+    private void SetAudioBitRateSettingListener(){
+        TextView tv = view.findViewById(R.id.bit_rate_setting_text_view);
+        tv.setText(Integer.toString(sharedPreferences.getInt("AudioBitRate", 24)) + "-bit");
+
+        RelativeLayout bitrateView = view.findViewById(R.id.bit_rate_setting_parent_view);
+        bitrateView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                final String list[] = {"8-bit", "16-bit", "24-bit"};
+
+                AlertDialog.Builder alt_bld = new AlertDialog.Builder(getContext());
+                alt_bld.setTitle("Select New Bit Rate:");
+                alt_bld.setSingleChoiceItems(list, -1, new DialogInterface
+                        .OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        Toast.makeText(getContext(), "New Bit Rate: " + list[item], Toast.LENGTH_SHORT).show();
+                        UpdateBitRateSetting(list[item]);
+                        dialog.dismiss();
+
+                    }
+                });
+                AlertDialog alert = alt_bld.create();
+                alert.show();
+            }
+        });
     }
 
     private void SetAudioSampleRateSettingListener(){
         TextView tv = view.findViewById(R.id.sample_rate_setting_text_view);
         tv.setText(Integer.toString(sharedPreferences.getInt("AudioSampleRate", 16)) + " kHz");
 
-        RelativeLayout cushionView = view.findViewById(R.id.sample_rate_setting_parent_view);
-        cushionView.setOnClickListener(new View.OnClickListener(){
+        RelativeLayout sampleRateView = view.findViewById(R.id.sample_rate_setting_parent_view);
+        sampleRateView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 final String list[] = {"48kHz", "44kHz", "32kHz", "22kHz", "16kHz", "8kHz"};
@@ -138,6 +167,21 @@ public class SettingsFragment extends Fragment {
         editor.commit();
         TextView tv = view.findViewById(R.id.sample_rate_setting_text_view);
         tv.setText(Integer.toString(newSampleRate)+" kHz");
+    }
+
+    private void UpdateBitRateSetting(String selection){
+        for (int i = 0; i < 4; i++){
+            selection = selection.substring(0, selection.length() - 1);
+        }
+
+        int newBitRate = Integer.parseInt(selection);
+
+        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("AudioBitRate", newBitRate);
+        editor.commit();
+        TextView tv = view.findViewById(R.id.bit_rate_setting_text_view);
+        tv.setText(Integer.toString(newBitRate) + "-bit");
     }
 
 }
