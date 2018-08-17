@@ -252,6 +252,9 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
 
             startTime = 0;
 
+            text = (TextView)view.findViewById(R.id.recording_length_text);
+            text.setText("00:00:00");
+
             // Change from hard coded string
             if (manuallyEnded)
                 mainActivityInterface.SwitchToFragment(tempFilePrefix);
