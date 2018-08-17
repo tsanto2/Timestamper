@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 break;
                         }
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                        //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                         transaction.show(selectedFragment);
                         transaction.addToBackStack(hide1);
                         transaction.addToBackStack(hide2);
