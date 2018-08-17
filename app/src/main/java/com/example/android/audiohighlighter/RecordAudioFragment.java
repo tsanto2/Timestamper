@@ -138,10 +138,10 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
         audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         audioRecorder.setOutputFile(temporaryAudioFilePath);
         audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        sampleRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioSampleRate", 16);
-        audioRecorder.setAudioSamplingRate(sampleRate);
-        int bitRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioBitRate", 24);
-        audioRecorder.setAudioEncodingBitRate(bitRate);
+        sampleRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioSampleRate", 24);
+        audioRecorder.setAudioSamplingRate(sampleRate * 1000);
+        int bitRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioBitRate", 48);
+        audioRecorder.setAudioEncodingBitRate(bitRate * 1000);
 
         try {
             audioRecorder.prepare();
