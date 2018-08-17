@@ -193,5 +193,11 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"/>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/purchase_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="purchase"/>
     </LinearLayout>
 </RelativeLayout>
