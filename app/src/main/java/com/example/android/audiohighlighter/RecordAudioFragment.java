@@ -59,6 +59,8 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
     private View recordAudioButton;
     private long startTime, currTime, pauseStartTime, pauseTimeMillis;
     private String newTitle;
+    private long recordingLimit;
+    private boolean isPremium;
 
     private BillingProcessor bp;
 
@@ -166,7 +168,15 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
                 int time = (int)(SystemClock.uptimeMillis() - pauseTimeMillis - startTime);
                 recLength.setText(playbackFrag.getTime(time));
 
-                timeTrackingHandler.postDelayed(this, 10);
+                if (time >= recordingLimit && !isPremium){
+                    // TODO: Add popup for premium info!
+                    StopRecording(true);
+                    timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
+                    timeMillis = 0;
+                }
+                else {
+                    timeTrackingHandler.postDelayed(this, 10);
+                }
             }
         };
 
@@ -400,9 +410,22 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
 
     void SetPurchaseButtonListener(){
         Button btn = (Button)view.findViewById(R.id.purchase_btn);
+        //if (bp.isPurchased("android.test.purchased")){
+        if (bp.isPurchased("premium_test.1")){
+            // TODO: Write code here to validate premium purchase
+            isPremium = true;
+            btn.setText("Butts");
+        }
+        else{
+            // TODO: Change recording length limit
+            isPremium = false;
+            // Non-premium time limit = 30 minutes
+            recordingLimit = 1800000;
+        }
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //bp.purchase(getActivity(), "android.test.purchased");
                 bp.purchase(getActivity(), "premium_test.1");
             }
         });
@@ -412,6 +435,7 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
         Button btn = view.findViewById(R.id.purchase_btn);
         btn.setText("SUCCESS!");
+        isPremium = true;
     }
 
     @Override
