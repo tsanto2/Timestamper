@@ -32,8 +32,10 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
     public TimestampAdapter(Activity context, ArrayList<Timestamp> timestamps){
         super(context, 0, timestamps);
         thisAdapter = this;
-        if (timestamps.size() > 0)
-            stamps = timestamps;
+        // Commenting out for now...
+        // Seems to cause crash upon timestamp deletion when stamps is not initialized.
+        //if (timestamps.size() > 0)
+        stamps = timestamps;
     }
 
     @NonNull
@@ -68,7 +70,7 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
                             case R.id.timestamp_option_delete:
                                 Toast.makeText(getContext(), "DELETING TIMESTAMP.", Toast.LENGTH_SHORT).show();
 
-                                if (getItem(position) != null)
+                                if (getItem(position) != null && stamps != null)
                                     stamps.remove(getItem(position));
 
                                 MainActivity activity = (MainActivity)getContext();
