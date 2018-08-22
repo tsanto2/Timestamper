@@ -1,8 +1,12 @@
 package com.example.android.audiohighlighter;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
@@ -24,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
+    private SharedPreferences sharedPreferences;
+    private boolean firstRun;
+
     private BottomNavigationView bottomNavBar;
     private ActionBar toolBar;
 
@@ -41,9 +48,33 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         setContentView(R.layout.activity_main);
         MobileAds.initialize(this, adMobAppID);
 
+        sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+
         CreateFragments();
         SetupActionBar();
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+
+
+        firstRun = sharedPreferences.getBoolean("FirstRun", true);
+
+        if (firstRun){
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Premium Upgrade")
+                    .setMessage("Premium upgrade allows you to blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+        // TODO: Set first run false after showing this. Maybe counter for first 5 times?
     }
 
     @Override
