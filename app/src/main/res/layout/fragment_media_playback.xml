@@ -7,16 +7,6 @@
     tools:context="com.example.android.audiohighlighter.MediaPlaybackFragment"
     android:background="@drawable/bg_gradient">
 
-    <TextView
-        android:id="@+id/empty_stamp_list_text"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textAlignment="center"
-        android:text="Tap the Plus Button below to add a timestamp..."
-        android:textColor="@color/colorAccent"
-        android:textStyle="italic"/>
 
     <LinearLayout
         android:id="@+id/media_playback_frag_container"
@@ -104,6 +94,18 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_gradient"
             android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/empty_stamp_list_text"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:textAlignment="center"
+                android:text="Tap the Plus Button below to add a timestamp..."
+                android:textColor="@color/colorAccent"
+                android:textStyle="italic"/>
 
             <ListView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"

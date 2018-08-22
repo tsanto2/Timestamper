@@ -122,6 +122,11 @@ public class MediaPlaybackFragment extends Fragment {
                     timestamps.add(new Timestamp(tempJson.getInt(i), tempJson.getString(i + 1)));
                     i++;
                 }
+
+                if (timestamps.size() < 1){
+                    TextView tv = view.findViewById(R.id.empty_stamp_list_text);
+                    tv.setVisibility(View.VISIBLE);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -321,7 +326,7 @@ public class MediaPlaybackFragment extends Fragment {
 
         TextView tv = view.findViewById(R.id.empty_stamp_list_text);
 
-        if (timestamps.size() > 0){
+        if (timestamps.size() < 1){
             tv.setVisibility(View.INVISIBLE);
         }
         else {
