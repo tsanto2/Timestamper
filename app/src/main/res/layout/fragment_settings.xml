@@ -107,7 +107,7 @@
                     android:textSize="16dp"
                     android:textColor="@android:color/white"
                     android:text="Recording Bit Rate:"/>
-                \
+
                 <TextView
                     android:id="@+id/bit_rate_setting_text_view"
                     android:layout_width="wrap_content"
@@ -139,6 +139,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/premium_popup_setting"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:paddingStart="6dp">
@@ -148,7 +149,16 @@
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
                     android:textColor="@android:color/white"
-                    android:text="Placeholder:"/>
+                    android:text="Disable Premium Popup:"/>
+                <TextView
+                    android:id="@+id/premium_popup_setting_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="16dp"
+                    android:textColor="@android:color/white"
+                    android:text="No"/>
             </RelativeLayout>
 
             <View

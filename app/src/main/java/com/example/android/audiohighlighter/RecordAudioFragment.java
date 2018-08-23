@@ -426,9 +426,15 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
             @Override
             public void onClick(View v) {
                 //bp.purchase(getActivity(), "android.test.purchased");
-                bp.purchase(getActivity(), "premium_test.1");
+                //bp.purchase(getActivity(), "premium_test.1");
+                PurchasePremium();
             }
         });
+    }
+
+    public void PurchasePremium(){
+        //bp.purchase(getActivity(), "android.test.purchased");
+        bp.purchase(getActivity(), "premium_test.1");
     }
 
     @Override

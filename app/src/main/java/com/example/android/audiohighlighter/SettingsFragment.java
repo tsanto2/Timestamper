@@ -51,6 +51,8 @@ public class SettingsFragment extends Fragment {
 
         SetAudioBitRateSettingListener();
 
+        SetPremiumPopupSettingListener();
+
         return view;
     }
 
@@ -149,6 +151,52 @@ public class SettingsFragment extends Fragment {
                     }
                 });
 
+                builder.show();
+            }
+        });
+    }
+
+    private void SetPremiumPopupSettingListener(){
+        RelativeLayout premiumPopupSetting = view.findViewById(R.id.premium_popup_setting);
+        if (sharedPreferences.getBoolean("PremiumDialogueDisabled", false)){
+            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+            tv.setText("Yes");
+        }
+        else{
+            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+            tv.setText("No");
+        }
+        premiumPopupSetting.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Disable Premium Popup?")
+                    .setMessage("Boobs tits ass boner penis balls dick")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO: Implement purchase flow
+
+                            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+                            tv.setText("No");
+
+                            sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("PremiumDialogueDisabled", false);
+                            editor.commit();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+                            tv.setText("Yes");
+
+                            sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("PremiumDialogueDisabled", true);
+                            editor.commit();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert);
                 builder.show();
             }
         });

@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         runCount = sharedPreferences.getInt("RunCount", 0);
 
-        if (runCount > 2){
+        if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false)){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Premium Upgrade")
                     .setMessage("Premium upgrade allows you to blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah")
