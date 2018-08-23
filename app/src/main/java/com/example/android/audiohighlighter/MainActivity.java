@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
     private SharedPreferences sharedPreferences;
-    private boolean firstRun;
+    private int runCount;
 
     private BottomNavigationView bottomNavBar;
     private ActionBar toolBar;
@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
 
-        firstRun = sharedPreferences.getBoolean("FirstRun", true);
+        runCount = sharedPreferences.getInt("RunCount", 0);
 
-        if (firstRun){
+        if (runCount > 2){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Premium Upgrade")
                     .setMessage("Premium upgrade allows you to blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah")
@@ -73,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        }
+        else{
+            runCount = sharedPreferences.getInt("RunCount", 0) + 1;
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("RunCount", runCount);
+            editor.commit();
         }
         // TODO: Set first run false after showing this. Maybe counter for first 5 times?
     }
