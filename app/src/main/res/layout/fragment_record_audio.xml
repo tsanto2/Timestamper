@@ -37,107 +37,12 @@
             android:textSize="12sp"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"/>
-        <!-- Change button text from hard coded string -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical|center_horizontal">
-            <ImageButton
-                android:id="@+id/record_timestamp_btn"
-                android:src="@drawable/ic_baseline_add_circle_outline_24px"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_gravity="center_horizontal"
-                android:tint="@color/colorAccent"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:scaleType="fitCenter"/>
-            <TextView
-                android:id="@+id/timestamp_tip_text_view"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:textAlignment="center"
-                android:text="Add Timestamp"
-                android:textColor="@color/colorAccent"
-                android:textSize="10sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/record_view_buttons_parent_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="0dp">
-
-            <!-- This is an example comment :] -->
-            <LinearLayout
-                android:id="@+id/save_linear_parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical">
-                <ImageButton
-                    android:id="@+id/save_recording_btn"
-                    android:src="@drawable/ic_baseline_save_24px"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:tint="@color/colorAccent"
-                    android:scaleType="fitCenter"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/start_record_btn_text"/>
-
-                <TextView
-                    android:id="@+id/save_tip_text_view"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Save Recording"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="10sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/record_linear_parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical">
-                <ImageButton
-                    android:id="@+id/record_audio_btn"
-                    android:src="@drawable/ic_baseline_mic_24px"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:tint="@color/colorAccent"
-                    android:scaleType="fitCenter"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/start_record_btn_text"/>
-
-                <TextView
-                    android:id="@+id/record_tip_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Record"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="10sp"/>
-            </LinearLayout>
-
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
@@ -192,10 +97,109 @@
                 android:textColor="@color/colorAccent"/>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/purchase_btn"
+        <!-- Change button text from hard coded string -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="purchase"/>
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical|center_horizontal">
+            <ImageButton
+                android:id="@+id/record_timestamp_btn"
+                android:src="@drawable/ic_baseline_add_circle_outline_24px"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_gravity="center_horizontal"
+                android:tint="@color/colorAccent"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:id="@+id/timestamp_tip_text_view"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAlignment="center"
+                android:text="Add Timestamp"
+                android:textColor="@color/colorAccent"
+                android:textSize="10sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/record_view_buttons_parent_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="0dp">
+
+            <!-- This is an example comment :] -->
+            <LinearLayout
+                android:id="@+id/save_linear_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+                <ImageButton
+                    android:id="@+id/save_recording_btn"
+                    android:src="@drawable/ic_baseline_save_24px"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:tint="@color/colorAccent"
+                    android:scaleType="fitCenter"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/start_record_btn_text"/>
+
+                <TextView
+                    android:id="@+id/save_tip_text_view"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Save Recording"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="10sp"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/purchase_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="P"/>
+
+            <LinearLayout
+                android:id="@+id/record_linear_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+                <ImageButton
+                    android:id="@+id/record_audio_btn"
+                    android:src="@drawable/ic_baseline_mic_24px"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:tint="@color/colorAccent"
+                    android:scaleType="fitCenter"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/start_record_btn_text"/>
+
+                <TextView
+                    android:id="@+id/record_tip_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Record"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="10sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </RelativeLayout>
