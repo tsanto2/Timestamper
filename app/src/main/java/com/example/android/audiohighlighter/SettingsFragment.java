@@ -53,6 +53,10 @@ public class SettingsFragment extends Fragment {
 
         SetPremiumPopupSettingListener();
 
+        SetStorageSpaceSettingListener();
+
+        SetHintsSettingListener();
+
         return view;
     }
 
@@ -197,6 +201,93 @@ public class SettingsFragment extends Fragment {
                         }
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert);
+                builder.show();
+            }
+        });
+    }
+
+    private void SetStorageSpaceSettingListener(){
+        RelativeLayout storageSpaceSetting = view.findViewById(R.id.storage_space_setting);
+        if (sharedPreferences.getBoolean("StorageTextDisabled", true)){
+            TextView tv = view.findViewById(R.id.storage_space_setting_text_view);
+            tv.setText("Yes");
+        }
+        else{
+            TextView tv = view.findViewById(R.id.storage_space_setting_text_view);
+            tv.setText("No");
+        }
+        storageSpaceSetting.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Disable Storage Space Text?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                TextView tv = view.findViewById(R.id.storage_space_setting_text_view);
+                                tv.setText("Yes");
+
+                                sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("StorageTextDisabled", true);
+                                editor.commit();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                TextView tv = view.findViewById(R.id.storage_space_setting_text_view);
+                                tv.setText("No");
+
+                                sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("StorageTextDisabled", false);
+                                editor.commit();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert);
+                builder.show();
+            }
+        });
+    }
+
+    private void SetHintsSettingListener(){
+        RelativeLayout hintsSetting = view.findViewById(R.id.hints_setting);
+        TextView tv = view.findViewById(R.id.hints_setting_text_view);
+
+        if (sharedPreferences.getBoolean("HintsDisabled", false)){
+            tv.setText("Yes");
+        }
+        else{
+            tv.setText("No");
+        }
+
+        hintsSetting.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Disable Hints?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                TextView tv = view.findViewById(R.id.hints_setting_text_view);
+                                tv.setText("Yes");
+
+                                sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("HintsDisabled", true);
+                                editor.commit();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                TextView tv = view.findViewById(R.id.hints_setting_text_view);
+                                tv.setText("No");
+
+                                sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("HintsDisabled", false);
+                                editor.commit();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert);
                 builder.show();
             }
         });

@@ -28,6 +28,7 @@
             android:textColor="@color/colorAccent"/>
 
         <TextView
+            android:id="@+id/title_hint_text"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -70,6 +71,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/storage_space_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -167,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="P"/>
+                android:text="Test"/>
 
             <LinearLayout
                 android:id="@+id/record_linear_parent"

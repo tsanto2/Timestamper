@@ -18,6 +18,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity implements MainActivityInterface{
@@ -172,6 +175,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 hide1 = PLAYBACK_TAG;
                                 hide2 = LIBRARY_TAG;
                                 hide3 = SETTINGS_TAG;
+
+                                CheckRecordingScreenSettings();
+
                                 Log.d("SELECTION", "Record");
                                 break;
 
@@ -217,6 +223,47 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     }
                 }
         );
+    }
+
+    private void CheckRecordingScreenSettings(){
+        boolean storageTextDisabled = getPreferences(Context.MODE_PRIVATE).getBoolean("StorageTextDisabled", true);
+        LinearLayout storageLayout = findViewById(R.id.storage_space_layout);
+
+        if (storageTextDisabled){
+            storageLayout.setVisibility(View.GONE);
+        }
+        else{
+            storageLayout.setVisibility(View.VISIBLE);
+        }
+
+        boolean hintsTextDisabled = getPreferences(Context.MODE_PRIVATE).getBoolean("HintsDisabled", false);
+        if (hintsTextDisabled) {
+            TextView tv = findViewById(R.id.title_hint_text);
+            tv.setVisibility(View.GONE);
+
+            tv = findViewById(R.id.record_tip_text_view);
+            tv.setVisibility(View.GONE);
+
+            tv = findViewById(R.id.save_tip_text_view);
+            tv.setVisibility(View.GONE);
+
+            tv = findViewById(R.id.timestamp_tip_text_view);
+            tv.setVisibility(View.GONE);
+        }
+        else{
+            TextView tv = findViewById(R.id.title_hint_text);
+            tv.setVisibility(View.VISIBLE);
+
+            tv = findViewById(R.id.record_tip_text_view);
+            tv.setVisibility(View.VISIBLE);
+
+            tv = findViewById(R.id.save_tip_text_view);
+            tv.setVisibility(View.VISIBLE);
+
+            tv = findViewById(R.id.timestamp_tip_text_view);
+            tv.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

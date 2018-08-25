@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,6 +110,28 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
         SetSaveRecordingButtonListener();
         SetTitleTextTouchedListener();
         SetPurchaseButtonListener();
+
+        boolean storageTextDisabled = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean("StorageTextDisabled", true);
+        LinearLayout storageLayout = view.findViewById(R.id.storage_space_layout);
+
+        if (storageTextDisabled){
+            storageLayout.setVisibility(View.GONE);
+        }
+
+        boolean hintsTextDisabled = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean("HintsDisabled", false);
+        if (hintsTextDisabled) {
+            TextView tv = view.findViewById(R.id.title_hint_text);
+            tv.setVisibility(View.GONE);
+
+            tv = view.findViewById(R.id.record_tip_text_view);
+            tv.setVisibility(View.GONE);
+
+            tv = view.findViewById(R.id.save_tip_text_view);
+            tv.setVisibility(View.GONE);
+
+            tv = view.findViewById(R.id.timestamp_tip_text_view);
+            tv.setVisibility(View.GONE);
+        }
 
         return view;
     }

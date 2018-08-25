@@ -12,7 +12,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         tools:context="com.example.android.audiohighlighter.SettingsFragment">
 
         <TextView
@@ -135,7 +136,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
+            android:paddingBottom="24dp"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -168,6 +169,7 @@
                 android:background="@color/colorAccent"/>
 
             <RelativeLayout
+                android:id="@+id/storage_space_setting"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:paddingStart="6dp">
@@ -177,7 +179,45 @@
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
                     android:textColor="@android:color/white"
-                    android:text="Placeholder:"/>
+                    android:text="Hide Storage Space Text:"/>
+                <TextView
+                    android:id="@+id/storage_space_setting_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="16dp"
+                    android:textColor="@android:color/white"
+                    android:text="No"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:paddingStart="24dp"
+                android:background="@color/colorAccent"/>
+
+            <RelativeLayout
+                android:id="@+id/hints_setting"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:paddingStart="6dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="16dp"
+                    android:textColor="@android:color/white"
+                    android:text="Hide Hints:"/>
+                <TextView
+                    android:id="@+id/hints_setting_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="16dp"
+                    android:textColor="@android:color/white"
+                    android:text="No"/>
             </RelativeLayout>
 
             <View
