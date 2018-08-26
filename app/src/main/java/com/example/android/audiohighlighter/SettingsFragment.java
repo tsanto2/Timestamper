@@ -23,7 +23,7 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends android.support.v4.app.Fragment {
 
     private View view;
 

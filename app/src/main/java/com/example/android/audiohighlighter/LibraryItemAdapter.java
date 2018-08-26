@@ -51,7 +51,7 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
         TextView itemDurationTextView = listItemView.findViewById(R.id.library_item_duration_text_view);
         int temp = currentItem.GetItemDuration();
         MainActivity activity = (MainActivity)getContext();
-        MediaPlaybackFragment playbackFrag = (MediaPlaybackFragment)activity.getFragmentManager().findFragmentByTag("playback");
+        MediaPlaybackFragment playbackFrag = (MediaPlaybackFragment)activity.getSupportFragmentManager().findFragmentByTag("playback");
         String time = playbackFrag.getTime(temp);
         itemDurationTextView.setText(time);
 

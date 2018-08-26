@@ -74,7 +74,7 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
                                     stamps.remove(getItem(position));
 
                                 MainActivity activity = (MainActivity)getContext();
-                                MediaPlaybackFragment mpFrag = (MediaPlaybackFragment)activity.getFragmentManager().findFragmentByTag("playback");
+                                MediaPlaybackFragment mpFrag = (MediaPlaybackFragment)activity.getSupportFragmentManager().findFragmentByTag("playback");
                                 mpFrag.SetTimestamps(stamps);
                                 mpFrag.SaveTimestamps();
                                 mpFrag.timestampAdapter.notifyDataSetChanged();
@@ -101,7 +101,7 @@ public class TimestampAdapter extends ArrayAdapter<Timestamp> {
                                         currentStamp.SetTimestampComment(m_Text);
 
                                         MainActivity activity = (MainActivity)getContext();
-                                        MediaPlaybackFragment mpFrag = (MediaPlaybackFragment)activity.getFragmentManager().findFragmentByTag("playback");
+                                        MediaPlaybackFragment mpFrag = (MediaPlaybackFragment)activity.getSupportFragmentManager().findFragmentByTag("playback");
                                         mpFrag.SetTimestamps(stamps);
                                         mpFrag.SaveTimestamps();
                                         mpFrag.timestampAdapter.notifyDataSetChanged();

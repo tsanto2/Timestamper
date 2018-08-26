@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-public class MediaPlaybackFragment extends Fragment {
+public class MediaPlaybackFragment extends android.support.v4.app.Fragment {
 
     private View view;
 

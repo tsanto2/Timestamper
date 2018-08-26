@@ -43,7 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class RecordAudioFragment extends Fragment implements BillingProcessor.IBillingHandler{
+public class RecordAudioFragment extends android.support.v4.app.Fragment implements BillingProcessor.IBillingHandler{
 
     private View view;
     private boolean isRecording, isPaused;
@@ -98,7 +98,7 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
         internalDirectory = getContext().getFilesDir();
         timestamps = new ArrayList<>();
 
-        playbackFrag = (MediaPlaybackFragment)getActivity().getFragmentManager().findFragmentByTag("playback");
+        playbackFrag = (MediaPlaybackFragment)getActivity().getSupportFragmentManager().findFragmentByTag("playback");
 
         TextView tv2 = view.findViewById(R.id.storage_space_text);
         long freeSpace = internalDirectory.getFreeSpace();
@@ -296,7 +296,7 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
                 mainActivityInterface.SwitchToFragment(tempFilePrefix);
 
             else{
-                LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)getFragmentManager().findFragmentByTag("library");
+                LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)getActivity().getSupportFragmentManager().findFragmentByTag("library");
                 tempLibFrag.RefreashLibraryItemAdapter();
             }
         }

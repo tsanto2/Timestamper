@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     private BottomNavigationView bottomNavBar;
     private ActionBar toolBar;
 
-    private Fragment recordFrag, playbackFrag, libraryFrag, settingsFrag, prevFrag;
+    private android.support.v4.app.Fragment recordFrag, playbackFrag, libraryFrag, settingsFrag, prevFrag;
 
     private final String RECORD_TAG = "record";
     private final String PLAYBACK_TAG = "playback";
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     .setMessage("Premium upgrade allows you to record for as long as you want, create as many recordings as you want, and allows access to several customization settings. There are also many additional premium features planned for future updates.")
                     .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            RecordAudioFragment tempFrag = (RecordAudioFragment)getFragmentManager().findFragmentByTag(RECORD_TAG);
+                            RecordAudioFragment tempFrag = (RecordAudioFragment)getSupportFragmentManager().findFragmentByTag(RECORD_TAG);
                             tempFrag.PurchasePremium();
                         }
                     })
@@ -111,12 +111,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     // Used for switching to playback fragment and passing filename to play
     @Override
     public void SwitchToFragment(String tempAudioFilePath){
-        MediaPlaybackFragment tempFrag = (MediaPlaybackFragment)getFragmentManager().findFragmentByTag(PLAYBACK_TAG);
+        MediaPlaybackFragment tempFrag = (MediaPlaybackFragment)getSupportFragmentManager().findFragmentByTag(PLAYBACK_TAG);
         tempFrag.SetPlaybackInfo(tempAudioFilePath);
-        LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)getFragmentManager().findFragmentByTag(LIBRARY_TAG);
+        LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)getSupportFragmentManager().findFragmentByTag(LIBRARY_TAG);
         tempLibFrag.RefreashLibraryItemAdapter();
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.addToBackStack(RECORD_TAG);
         transaction.addToBackStack(LIBRARY_TAG);
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         libraryFrag = LibraryAccessFragment.newInstance();
         settingsFrag = SettingsFragment.newInstance();
         prevFrag = recordFrag;
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.container, recordFrag, RECORD_TAG);
         transaction.add(R.id.container, playbackFrag, PLAYBACK_TAG);
         transaction.add(R.id.container, libraryFrag, LIBRARY_TAG);
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         transaction.hide(playbackFrag);
         transaction.hide(settingsFrag);
         transaction.show(recordFrag);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
     }
 
@@ -165,19 +165,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment selectedFragment = null;
+                        android.support.v4.app.Fragment selectedFragment = null;
+                        //Fragment selectedFragment = null;
                         String hide1 = null;
                         String hide2 = null;
                         String hide3 = null;
 
                         if (prevFrag == recordFrag){
-                            RecordAudioFragment tempFrag = (RecordAudioFragment)getFragmentManager().findFragmentByTag(RECORD_TAG);
+                            RecordAudioFragment tempFrag = (RecordAudioFragment)getSupportFragmentManager().findFragmentByTag(RECORD_TAG);
                             tempFrag.StopRecording(false);
                         }
 
                         switch (item.getItemId()){
                             case R.id.navigation_record_frag:
-                                selectedFragment = getFragmentManager().findFragmentByTag(RECORD_TAG);
+                                selectedFragment = getSupportFragmentManager().findFragmentByTag(RECORD_TAG);
                                 prevFrag = selectedFragment;
                                 getSupportActionBar().setTitle("Record");
                                 getSupportActionBar().show();
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 break;
 
                             case R.id.navigation_library_frag:
-                                selectedFragment = getFragmentManager().findFragmentByTag(LIBRARY_TAG);
+                                selectedFragment = getSupportFragmentManager().findFragmentByTag(LIBRARY_TAG);
                                 LibraryAccessFragment tempLibFrag = (LibraryAccessFragment)selectedFragment;
                                 tempLibFrag.GetLibraryItems();
                                 prevFrag = selectedFragment;
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 break;
 
                             case R.id.navigation_settings_frag:
-                                selectedFragment = getFragmentManager().findFragmentByTag(SETTINGS_TAG);
+                                selectedFragment = getSupportFragmentManager().findFragmentByTag(SETTINGS_TAG);
                                 prevFrag = selectedFragment;
                                 getSupportActionBar().setTitle("Settings");
                                 getSupportActionBar().show();
@@ -214,15 +215,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 Log.d("SELECTION", "Library");
                                 break;
                         }
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                         transaction.show(selectedFragment);
                         transaction.addToBackStack(hide1);
                         transaction.addToBackStack(hide2);
                         transaction.addToBackStack(hide3);
-                        transaction.hide(getFragmentManager().findFragmentByTag(hide1));
-                        transaction.hide(getFragmentManager().findFragmentByTag(hide2));
-                        transaction.hide(getFragmentManager().findFragmentByTag(hide3));
+                        transaction.hide(getSupportFragmentManager().findFragmentByTag(hide1));
+                        transaction.hide(getSupportFragmentManager().findFragmentByTag(hide2));
+                        transaction.hide(getSupportFragmentManager().findFragmentByTag(hide3));
                         transaction.commit();
                         if (isPlaybackFrag) {
                             bottomNavBar.setVisibility(View.GONE);
@@ -284,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             mPlayer.stop();
             getSupportActionBar().show();
             bottomNavBar.setVisibility(View.VISIBLE);
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.addToBackStack(PLAYBACK_TAG);
             transaction.hide(playbackFrag);
             transaction.show(prevFrag);

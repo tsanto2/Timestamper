@@ -24,13 +24,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class LibraryAccessFragment extends Fragment{
+public class LibraryAccessFragment extends android.support.v4.app.Fragment{
 
     private LibraryItemAdapter libraryItemAdapter;
     private MainActivityInterface mainActivityInterface;
     private ArrayList<LibraryItem> libraryItems;
     private ListView listView;
-    private View view;
+    private ViewGroup view;
     private File dataDir;
     private boolean isPremium = false;
 
@@ -46,7 +46,7 @@ public class LibraryAccessFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        view = inflater.inflate(R.layout.fragment_access_library, container, false);
+        view = (ViewGroup)inflater.inflate(R.layout.fragment_access_library, container, false);
 
         AdView bannerAdView = view.findViewById(R.id.adView);
         if (!isPremium) {
