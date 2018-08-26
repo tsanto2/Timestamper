@@ -6,10 +6,12 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
@@ -18,12 +20,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.gms.ads.MobileAds;
 
-public class MainActivity extends AppCompatActivity implements MainActivityInterface{
+public class MainActivity extends AppCompatActivity implements MainActivityInterface, BillingProcessor.IBillingHandler{
 
     private String adMobAppID = "ca-app-pub-9485517543167139~7756344909";
 
@@ -45,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     private final String SETTINGS_TAG = "settings";
     private boolean isPlaybackFrag = false;
 
+    private BillingProcessor bp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,19 +64,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         SetupActionBar();
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
+        bp = new BillingProcessor(this, null, this);
 
         runCount = sharedPreferences.getInt("RunCount", 0);
 
         if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false)){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Premium Upgrade")
-                    .setMessage("Premium upgrade allows you to blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    .setMessage("Premium upgrade allows you to record for as long as you want, create as many recordings as you want, and allows access to several customization settings. There are also many additional premium features planned for future updates.")
+                    .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // continue with delete
+                            RecordAudioFragment tempFrag = (RecordAudioFragment)getFragmentManager().findFragmentByTag(RECORD_TAG);
+                            tempFrag.PurchasePremium();
                         }
                     })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    .setNegativeButton("No Thanks", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // do nothing
                         }
@@ -298,5 +307,40 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
             isPlaybackFrag = false;
         }
+    }
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (!bp.handleActivityResult(requestCode, resultCode, data)){
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        if (bp != null){
+            bp.release();
+        }
+        super.onDestroy();
     }
 }

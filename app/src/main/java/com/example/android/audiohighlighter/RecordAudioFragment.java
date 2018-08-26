@@ -61,7 +61,7 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
     private long startTime, currTime, pauseStartTime, pauseTimeMillis;
     private String newTitle;
     private long recordingLimit;
-    private boolean isPremium;
+    public boolean isPremium;
 
     private BillingProcessor bp;
 
@@ -110,6 +110,9 @@ public class RecordAudioFragment extends Fragment implements BillingProcessor.IB
         SetSaveRecordingButtonListener();
         SetTitleTextTouchedListener();
         SetPurchaseButtonListener();
+
+        Button btn = view.findViewById(R.id.purchase_btn);
+        btn.setVisibility(View.GONE);
 
         boolean storageTextDisabled = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean("StorageTextDisabled", true);
         LinearLayout storageLayout = view.findViewById(R.id.storage_space_layout);

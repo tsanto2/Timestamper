@@ -13,5 +13,8 @@
     <color name="colorDarkerishGray">#181818</color>
     <color name="colorEvenDarkerGray">#FF121212</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorYellow">#DEEFB7</color>
+    <color name="colorGreen">#5FB49C</color>
+    <color name="colorPurple">#682D63</color>
 
 </resources>
