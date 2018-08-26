@@ -124,7 +124,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Timestamp saved this amount of time before button press.");
+                builder.setTitle("Timestamp Cushion (ms):");
 
                 final View vFinal = v;
 
@@ -134,6 +134,7 @@ public class SettingsFragment extends Fragment {
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
                 builder.setView(input);
 
+                builder.setMessage("(Amount of time subtracted from current recording time. Used to account for delay of user pressing button.)");
                 // Set up the buttons
                 builder.setPositiveButton("Save Cushion", new DialogInterface.OnClickListener() {
                     @Override

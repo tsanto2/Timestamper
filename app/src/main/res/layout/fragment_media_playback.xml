@@ -24,7 +24,7 @@
             android:elevation="4dp"
             android:clipToPadding="false"
             android:clipChildren="false"
-            android:background="@color/colorAccent2">
+            android:background="@color/colorAccent">
 
             <TextView
                 android:id="@+id/recording_title_text_view"
@@ -38,7 +38,7 @@
                 android:textSize="20sp"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorPrimary"/>
 
             <SeekBar
                 android:id="@+id/seekbar_view"
@@ -49,8 +49,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:thumbTint="@color/colorAccent"
-                android:progressTint="@color/colorAccent"
+                android:thumbTint="@color/colorPrimary"
+                android:progressTint="@color/colorPrimary"
                 android:progressBackgroundTint="@color/colorSlightlyGray"/>
 
             <LinearLayout
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="16dp"
                 android:textSize="16sp"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:text="00:00:00"/>
 
             <TextView
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="16dp"
                 android:textSize="16sp"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:text=" / "/>
 
             <TextView
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="16dp"
                 android:textSize="16sp"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:text="00:00:00"/>
             </LinearLayout>
 
@@ -137,13 +137,13 @@
             android:gravity="center"
             android:padding="4dp"
             android:orientation="horizontal"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorAccent">
 
             <ImageButton
                 android:id="@+id/prevstamp_button_view"
                 android:src="@drawable/ic_baseline_arrow_left_24px"
                 style="?android:attr/borderlessButtonStyle"
-                android:tint="@color/colorAccent"
+                android:tint="@color/colorPrimary"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
@@ -155,7 +155,7 @@
                 android:id="@+id/restart_button_view"
                 android:src="@drawable/ic_baseline_settings_backup_restore_24px"
                 style="?android:attr/borderlessButtonStyle"
-                android:tint="@color/colorAccent"
+                android:tint="@color/colorPrimary"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
@@ -167,7 +167,7 @@
                 android:id="@+id/play_button_view"
                 android:src="@drawable/ic_baseline_play_circle_filled_24px"
                 style="?android:attr/borderlessButtonStyle"
-                android:tint="@color/colorAccent"
+                android:tint="@color/colorPrimary"
                 android:elevation="6dp"
                 android:layout_width="108dp"
                 android:layout_height="108dp"
@@ -180,7 +180,7 @@
                 android:id="@+id/mark_button_view"
                 android:src="@drawable/ic_baseline_add_circle_outline_24px"
                 style="?android:attr/borderlessButtonStyle"
-                android:tint="@color/colorAccent"
+                android:tint="@color/colorPrimary"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
@@ -192,7 +192,7 @@
                 android:id="@+id/nextstamp_button_view"
                 android:src="@drawable/ic_baseline_arrow_right_24px"
                 style="?android:attr/borderlessButtonStyle"
-                android:tint="@color/colorAccent"
+                android:tint="@color/colorPrimary"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"

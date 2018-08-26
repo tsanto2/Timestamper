@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="Timestamp Cushion:"/>
 
                 <TextView
@@ -55,7 +55,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="50 ms"/>
             </RelativeLayout>
 
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="Recording Sample Rate:"/>
                 <TextView
                     android:id="@+id/sample_rate_setting_text_view"
@@ -85,7 +85,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="16 kHz"/>
             </RelativeLayout>
 
@@ -106,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="Recording Bit Rate:"/>
 
                 <TextView
@@ -116,9 +116,15 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="16-bit"/>
             </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:paddingStart="24dp"
+                android:background="@color/colorAccent"/>
         </LinearLayout>
 
         <TextView
@@ -136,6 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:paddingBottom="24dp"
             android:orientation="vertical">
 
@@ -143,13 +150,14 @@
                 android:id="@+id/premium_popup_setting"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:paddingStart="6dp">
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="Disable Premium Popup:"/>
                 <TextView
                     android:id="@+id/premium_popup_setting_text_view"
@@ -158,7 +166,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="No"/>
             </RelativeLayout>
 
@@ -172,13 +180,14 @@
                 android:id="@+id/storage_space_setting"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:paddingStart="6dp">
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="Hide Storage Space Text:"/>
                 <TextView
                     android:id="@+id/storage_space_setting_text_view"
@@ -187,7 +196,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="No"/>
             </RelativeLayout>
 
@@ -201,13 +210,14 @@
                 android:id="@+id/hints_setting"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:paddingStart="6dp">
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="Hide Hints:"/>
                 <TextView
                     android:id="@+id/hints_setting_text_view"
@@ -216,7 +226,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:textSize="16dp"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorDarkishGray"
                     android:text="No"/>
             </RelativeLayout>
 

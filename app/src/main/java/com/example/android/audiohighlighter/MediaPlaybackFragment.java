@@ -302,6 +302,7 @@ public class MediaPlaybackFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 int stampTime = mMediaPlayer.getCurrentPosition();
+                stampTime -= getActivity().getPreferences(Context.MODE_PRIVATE).getInt("TimestampCushion", 0);
 
                 listView.findViewById(R.id.timestamp_list).setVisibility(View.VISIBLE);
 
