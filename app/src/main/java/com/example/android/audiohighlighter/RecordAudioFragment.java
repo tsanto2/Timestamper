@@ -166,9 +166,9 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
         audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         audioRecorder.setOutputFile(temporaryAudioFilePath);
         audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        sampleRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioSampleRate", 24);
+        sampleRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioSampleRate", 48);
         audioRecorder.setAudioSamplingRate(sampleRate * 1000);
-        int bitRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioBitRate", 48);
+        int bitRate = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("AudioBitRate", 24);
         audioRecorder.setAudioEncodingBitRate(bitRate * 1000);
 
         try {

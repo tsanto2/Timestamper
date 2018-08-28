@@ -57,6 +57,8 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
         SetHintsSettingListener();
 
+        SetActionBarSettingListener();
+
         return view;
     }
 
@@ -68,7 +70,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         bitrateView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                final String list[] = {"8-bit", "16-bit", "24-bit"};
+                final String list[] = {"24-bit", "16-bit", "8-bit"};
 
                 AlertDialog.Builder alt_bld = new AlertDialog.Builder(getContext());
                 alt_bld.setTitle("Select New Bit Rate:");
@@ -285,6 +287,50 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
                                 sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putBoolean("HintsDisabled", false);
+                                editor.commit();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert);
+                builder.show();
+            }
+        });
+    }
+
+    private void SetActionBarSettingListener(){
+        RelativeLayout actionBarSetting = view.findViewById(R.id.action_bar_setting);
+        TextView tv = view.findViewById(R.id.action_bar_setting_text_view);
+
+        if (sharedPreferences.getBoolean("ActionBarDisabled", false)){
+            tv.setText("Yes");
+        }
+        else{
+            tv.setText("No");
+        }
+
+        actionBarSetting.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Disable Action Bar?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                TextView tv = view.findViewById(R.id.action_bar_setting_text_view);
+                                tv.setText("Yes");
+
+                                sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("ActionBarDisabled", true);
+                                editor.commit();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                TextView tv = view.findViewById(R.id.action_bar_setting_text_view);
+                                tv.setText("No");
+
+                                sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("ActionBarDisabled", false);
                                 editor.commit();
                             }
                         })

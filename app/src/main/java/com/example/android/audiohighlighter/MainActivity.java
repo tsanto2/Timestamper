@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     private final String SETTINGS_TAG = "settings";
     private boolean isPlaybackFrag = false;
 
+    private boolean actionBarDisabled;
+
     private BillingProcessor bp;
 
     @Override
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         MobileAds.initialize(this, adMobAppID);
 
         sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+
+        actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
 
         CreateFragments();
         SetupActionBar();
@@ -153,6 +157,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         transaction.hide(playbackFrag);
         transaction.hide(settingsFrag);
         transaction.show(recordFrag);
+        actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
+        if(actionBarDisabled)
+            getSupportActionBar().hide();
+        else
+            getSupportActionBar().show();
         //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
     }
@@ -181,7 +190,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 selectedFragment = getSupportFragmentManager().findFragmentByTag(RECORD_TAG);
                                 prevFrag = selectedFragment;
                                 getSupportActionBar().setTitle("Record");
-                                getSupportActionBar().show();
+                                actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
+                                if(actionBarDisabled)
+                                    getSupportActionBar().hide();
+                                else
+                                    getSupportActionBar().show();
                                 hide1 = PLAYBACK_TAG;
                                 hide2 = LIBRARY_TAG;
                                 hide3 = SETTINGS_TAG;
@@ -197,7 +210,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 tempLibFrag.GetLibraryItems();
                                 prevFrag = selectedFragment;
                                 getSupportActionBar().setTitle("Library");
-                                getSupportActionBar().show();
+                                actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
+                                if(actionBarDisabled)
+                                    getSupportActionBar().hide();
+                                else
+                                    getSupportActionBar().show();
                                 hide1 = RECORD_TAG;
                                 hide2 = PLAYBACK_TAG;
                                 hide3 = SETTINGS_TAG;
@@ -208,7 +225,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                                 selectedFragment = getSupportFragmentManager().findFragmentByTag(SETTINGS_TAG);
                                 prevFrag = selectedFragment;
                                 getSupportActionBar().setTitle("Settings");
-                                getSupportActionBar().show();
+                                actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
+                                if(actionBarDisabled)
+                                    getSupportActionBar().hide();
+                                else
+                                    getSupportActionBar().show();
                                 hide1 = RECORD_TAG;
                                 hide2 = PLAYBACK_TAG;
                                 hide3 = LIBRARY_TAG;
@@ -295,15 +316,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             if (prevFrag == recordFrag) {
                 bottomNavBar.getMenu().getItem(0).setChecked(true);
                 getSupportActionBar().setTitle("Record");
+                actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
+                if(actionBarDisabled)
+                    getSupportActionBar().hide();
+                else
+                    getSupportActionBar().show();
             }
             else if (prevFrag == libraryFrag) {
                 bottomNavBar.getMenu().getItem(1).setChecked(true);
                 getSupportActionBar().setTitle("Library");
+                actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
+                if(actionBarDisabled)
+                    getSupportActionBar().hide();
+                else
+                    getSupportActionBar().show();
             }
             else if (prevFrag == settingsFrag) {
                 bottomNavBar.getMenu().getItem(2).setChecked(true);
                 getSupportActionBar().setTitle("Settings");
-                getSupportActionBar().setSubtitle("bitch");
+                actionBarDisabled = sharedPreferences.getBoolean("ActionBarDisabled", false);
+                if(actionBarDisabled)
+                    getSupportActionBar().hide();
+                else
+                    getSupportActionBar().show();
             }
 
             isPlaybackFrag = false;
