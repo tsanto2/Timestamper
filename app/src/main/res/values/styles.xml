@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,6 +6,11 @@
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/OrkneyTextViewStyle</item>
+    </style>
+
+    <style name="OrkneyTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/orkneymedium</item>
     </style>
 
 </resources>

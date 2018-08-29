@@ -19,16 +19,16 @@
             android:id="@+id/record_screen_title_text"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
             android:layout_gravity="center_horizontal"
             android:text="Start Recording"
-            android:textStyle="italic"
             android:textSize="24sp"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"/>
 
         <TextView
             android:id="@+id/title_hint_text"
+            android:layout_weight="1"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -40,11 +40,11 @@
             android:textColor="@color/colorAccent"/>
 
         <LinearLayout
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -72,6 +72,7 @@
 
         <LinearLayout
             android:id="@+id/storage_space_layout"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -103,6 +104,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_gravity="center_vertical|center_horizontal">
@@ -110,8 +112,10 @@
                 android:id="@+id/record_timestamp_btn"
                 android:src="@drawable/ic_baseline_add_circle_outline_24px"
                 style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/primary_title_bubble"
+                android:backgroundTint="@color/colorAccent"
                 android:layout_gravity="center_horizontal"
-                android:tint="@color/colorAccent"
+                android:tint="@color/colorPrimary"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:scaleType="fitCenter"/>
@@ -129,8 +133,10 @@
 
         <LinearLayout
             android:id="@+id/record_view_buttons_parent_layout"
+            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal"
             android:padding="0dp">
 
@@ -145,7 +151,9 @@
                     android:id="@+id/record_audio_btn"
                     android:src="@drawable/ic_baseline_mic_24px"
                     style="?android:attr/borderlessButtonStyle"
-                    android:tint="@color/colorAccent"
+                    android:background="@drawable/primary_title_bubble"
+                    android:backgroundTint="@color/colorAccent"
+                    android:tint="@color/colorPrimary"
                     android:scaleType="fitCenter"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
@@ -182,7 +190,9 @@
                     android:id="@+id/save_recording_btn"
                     android:src="@drawable/ic_baseline_save_24px"
                     style="?android:attr/borderlessButtonStyle"
-                    android:tint="@color/colorAccent"
+                    android:background="@drawable/primary_title_bubble"
+                    android:backgroundTint="@color/colorAccent"
+                    android:tint="@color/colorPrimary"
                     android:scaleType="fitCenter"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
