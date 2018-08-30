@@ -5,12 +5,16 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -18,17 +22,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class SettingsFragment extends android.support.v4.app.Fragment {
+public class SettingsFragment extends android.support.v4.app.Fragment implements BillingProcessor.IBillingHandler{
 
     private View view;
 
     private int stampCushion;
     private SharedPreferences sharedPreferences;
+
+    public BillingProcessor bp;
 
     public static SettingsFragment newInstance(){
         SettingsFragment fragment = new SettingsFragment();
@@ -45,6 +54,8 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         view = inflater.inflate(R.layout.fragment_settings, container, false);
         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
+        bp = new BillingProcessor(getContext(), null, this);
+
         SetTimestampCushionSettingListener();
 
         SetAudioSampleRateSettingListener();
@@ -59,7 +70,26 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
         SetActionBarSettingListener();
 
+        SetPremiumPurchaseButtonListener();
+
         return view;
+    }
+
+    private void SetPremiumPurchaseButtonListener(){
+        TextView tv = view.findViewById(R.id.premium_purchase_settings_btn);
+
+        if (!bp.isPurchased("premium_test.1")) {
+        //if (!bp.isPurchased("android.test.purchased")) {
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PurchasePremium();
+                }
+            });
+        }
+        else{
+            tv.setVisibility(View.GONE);
+        }
     }
 
     private void SetAudioBitRateSettingListener(){
@@ -368,6 +398,46 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
         editor.commit();
         TextView tv = view.findViewById(R.id.bit_rate_setting_text_view);
         tv.setText(Integer.toString(newBitRate) + "-bit");
+    }
+
+    public void PurchasePremium(){
+        //bp.purchase(getActivity(), "android.test.purchased");
+        bp.purchase(getActivity(), "premium_test.1");
+    }
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (!bp.handleActivityResult(requestCode, resultCode, data)){
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        if (bp != null){
+            bp.release();
+        }
+        super.onDestroy();
     }
 
 }

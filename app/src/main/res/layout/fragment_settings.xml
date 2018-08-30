@@ -21,13 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:background="@drawable/primary_title_bubble"
+            android:backgroundTint="@color/colorAccent"
             android:textAlignment="center"
-            android:layout_marginTop="16dp"
-            android:paddingStart="16dp"
-            android:textColor="@color/colorAccent"
+            android:layout_marginTop="12dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="24dp"
+            android:textColor="@color/colorPrimary"
             android:textAllCaps="true"
             android:textStyle="bold"
-            android:textSize="32dp"
+            android:textSize="24dp"
             android:text="PURCHASE PREMIUM"/>
 
         <TextView
