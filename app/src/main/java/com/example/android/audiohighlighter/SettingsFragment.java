@@ -208,11 +208,11 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Disable Premium Popup?")
-                    .setMessage("Boobs tits ass boner penis balls dick")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    //.setMessage("")
+                    .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // TODO: Implement purchase flow
-
+                            PurchasePremium();
                             TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
                             tv.setText("No");
 
@@ -222,7 +222,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
                             editor.commit();
                         }
                     })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Disable", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
                             tv.setText("Yes");
