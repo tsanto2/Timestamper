@@ -54,6 +54,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
     private String temporaryAudioFilePath;
     private String tempFilePrefix;
     private ArrayList<Timestamp> timestamps;
+    private int recordingCount;
     private Handler timeTrackingHandler, visualizerHandler;
     private Runnable timeTrackingRunnable, visualizerRunnable;
     private int timeMillis;
@@ -63,7 +64,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
     private long recordingLimit;
     public boolean isPremium;
 
-    private BillingProcessor bp;
+    public BillingProcessor bp;
 
     private int sampleRate;
 
@@ -94,6 +95,10 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
         view = inflater.inflate(R.layout.fragment_record_audio, container, false);
 
         bp = new BillingProcessor(getContext(), null, this);
+        //if (bp.isPurchased("android.test.purchased")){
+        if (bp.isPurchased("premium_test.1")) {
+            isPremium = true;
+        }
 
         internalDirectory = getContext().getFilesDir();
         timestamps = new ArrayList<>();
@@ -143,9 +148,8 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
     private void InitializeAudioRecorder(){
         newTitle = null;
 
-
         // Use time/date for temporary recording name
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss");
+        DateFormat df = new SimpleDateFormat("HH-mm-ss'T'MM-dd-yyyy");
         tempFilePrefix = df.format(Calendar.getInstance().getTime());
 
         TextView tv = view.findViewById(R.id.record_screen_title_text);
@@ -195,9 +199,26 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
                 recLength.setText(playbackFrag.getTime(time));
 
                 if (time >= recordingLimit && !isPremium){
-                    // TODO: Add popup for premium info!
-                    StopRecording(true);
-                    timeTrackingHandler.removeCallbacks(timeTrackingRunnable);
+                    PauseRecording();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Free Recording Limit Reached")
+                            .setMessage("Premium unlock allows you to record for an unlimited amount of time! Please purchase premium if you would like to record for a longer duration.")
+                            .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    PurchasePremium();
+                                    UnpauseRecording();
+                                    StopRecording(true);
+                                }
+                            })
+                            .setNegativeButton("No Thanks", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    UnpauseRecording();
+                                    StopRecording(true);
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                     timeMillis = 0;
                 }
                 else {
@@ -272,6 +293,8 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
 
     public void StopRecording(Boolean manuallyEnded){
         if (isRecording) {
+            if (isPaused)
+                UnpauseRecording();
             TextView tv = view.findViewById(R.id.record_screen_title_text);
             tv.setText("Start Recording");
             // Set recording variables, pause runnable, stop recording
@@ -318,6 +341,10 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
 
         // Create json array for saving array
         JSONArray jsonArray = new JSONArray();
+
+        /*if (isPaused){
+            pauseTimeMillis = SystemClock.uptimeMillis() - pauseStartTime + pauseTimeMillis;
+        }*/
 
         int time = (int)(SystemClock.uptimeMillis() - pauseTimeMillis - startTime);
         try {
@@ -370,10 +397,34 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
         recordAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RecordButtonPressed();
+                recordingCount = 0;
+                for (File file : getContext().getFilesDir().listFiles()){
+                    recordingCount++;
+                }
+
+                if ((!isPremium && recordingCount < 12) || isPremium)
+                    RecordButtonPressed();
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Free Recording Limit Reached")
+                        .setMessage("Premium unlock allows you to create an unlimited amount of recordings! Please purchase premium or delete an existing recording to create more.")
+                        .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                PurchasePremium();
+                            }
+                        })
+                        .setNegativeButton("No Thanks", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                }
             }
         });
     }
+
     private void SetRecordTimestampButtonListener(){
         final ImageButton recordTimestampButton = view.findViewById(R.id.record_timestamp_btn);
 
@@ -446,7 +497,8 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
             // TODO: Change recording length limit
             isPremium = false;
             // Non-premium time limit = 30 minutes
-            recordingLimit = 1800000;
+            recordingLimit = 1200000;
+            //recordingLimit = 10000;
         }
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

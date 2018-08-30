@@ -2,7 +2,10 @@ package com.example.android.audiohighlighter;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -24,7 +29,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class LibraryAccessFragment extends android.support.v4.app.Fragment{
+public class LibraryAccessFragment extends android.support.v4.app.Fragment implements  BillingProcessor.IBillingHandler{
 
     private LibraryItemAdapter libraryItemAdapter;
     private MainActivityInterface mainActivityInterface;
@@ -33,6 +38,8 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment{
     private ViewGroup view;
     private File dataDir;
     private boolean isPremium = false;
+
+    private BillingProcessor bp;
 
     public static LibraryAccessFragment newInstance(){
         LibraryAccessFragment fragment = new LibraryAccessFragment();
@@ -48,14 +55,7 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = (ViewGroup)inflater.inflate(R.layout.fragment_access_library, container, false);
 
-        AdView bannerAdView = view.findViewById(R.id.adView);
-        if (!isPremium) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            bannerAdView.loadAd(adRequest);
-        }
-        else{
-            bannerAdView.setVisibility(View.GONE);
-        }
+        bp = new BillingProcessor(getContext(), null, this);
 
         // List of saved audio+timestamp items in library
         libraryItems = new ArrayList<>();
@@ -70,6 +70,21 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment{
         if (libraryItems.size() > 0){
             TextView tv = view.findViewById(R.id.empty_library_text);
             tv.setVisibility(View.INVISIBLE);
+        }
+
+        //if (!bp.isPurchased("android.test.purchased"))
+        if (!bp.isPurchased("premium_test.1"))
+            isPremium = false;
+        else
+            isPremium = true;
+
+        AdView bannerAdView = view.findViewById(R.id.adView);
+        if (!isPremium) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            bannerAdView.loadAd(adRequest);
+        }
+        else{
+            bannerAdView.setVisibility(View.GONE);
         }
 
         return view;
@@ -184,6 +199,41 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment{
         }
 
         return name;
+    }
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (!bp.handleActivityResult(requestCode, resultCode, data)){
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        if (bp != null){
+            bp.release();
+        }
+        super.onDestroy();
     }
 
 }

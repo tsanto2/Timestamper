@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         runCount = sharedPreferences.getInt("RunCount", 0);
 
-        if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false)){
+        //if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false) && !bp.isPurchased("android.test.purchased")){
+        if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false) && !bp.isPurchased("premium_test.1")){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Premium Upgrade")
                     .setMessage("Premium upgrade allows you to record for as long as you want, create as many recordings as you want, and allows access to several customization settings. There are also many additional premium features planned for future updates.")

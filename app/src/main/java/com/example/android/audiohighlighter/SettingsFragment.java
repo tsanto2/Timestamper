@@ -91,7 +91,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment {
 
     private void SetAudioSampleRateSettingListener(){
         TextView tv = view.findViewById(R.id.sample_rate_setting_text_view);
-        tv.setText(Integer.toString(sharedPreferences.getInt("AudioSampleRate", 16)) + " kHz");
+        tv.setText(Integer.toString(sharedPreferences.getInt("AudioSampleRate", 48)) + " kHz");
 
         RelativeLayout sampleRateView = view.findViewById(R.id.sample_rate_setting_parent_view);
         sampleRateView.setOnClickListener(new View.OnClickListener(){

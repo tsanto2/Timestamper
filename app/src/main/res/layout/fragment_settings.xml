@@ -17,6 +17,20 @@
         tools:context="com.example.android.audiohighlighter.SettingsFragment">
 
         <TextView
+            android:id="@+id/premium_purchase_settings_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:layout_marginTop="16dp"
+            android:paddingStart="16dp"
+            android:textColor="@color/colorAccent"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textSize="32dp"
+            android:text="PURCHASE PREMIUM"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
