@@ -100,11 +100,12 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                 String sharePath = copyFiletoExternalStorage(getContext().getFilesDir() + "/"
                                     + currentItem.getItemName()+".ogg", currentItem.getItemName()+".wav");
                                 Uri uri = Uri.parse(sharePath);
-                                //File newfile = new File(uri.getPath());
-                                //Uri fileUri = FileProvider.getUriForFile(getContext(), "com.example.android.audiohighlighter", newfile);
-                                Intent share = new Intent(Intent.ACTION_SEND).addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                File newFile = new File(uri.getPath());
+                                Uri fileUri = FileProvider.getUriForFile(getContext(), "com.example.android.audiohighlighter", newFile);
+                                Intent share = new Intent(Intent.ACTION_SEND);
+                                share.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                                 share.setType("audio/*");
-                                share.putExtra(Intent.EXTRA_STREAM, uri);
+                                share.putExtra(Intent.EXTRA_STREAM, fileUri);
                                 ((MainActivity) getContext()).getApplication().startActivity(Intent.createChooser(share, "Share Sound File").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION));
 
                                 return true;
