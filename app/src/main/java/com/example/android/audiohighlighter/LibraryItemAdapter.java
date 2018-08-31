@@ -3,8 +3,12 @@ package com.example.android.audiohighlighter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -18,6 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
@@ -82,6 +91,24 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
 
                                 return true;
 
+                            case R.id.item_option_share:
+                                MainActivity mi = (MainActivity)((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag("library").getActivity();
+                                if (!mi.ReadWritePermissionGranted()){
+                                    // TODO: Tell user to grant permissions.
+                                    return true;
+                                }
+                                String sharePath = copyFiletoExternalStorage(getContext().getFilesDir() + "/"
+                                    + currentItem.getItemName()+".ogg", currentItem.getItemName()+".wav");
+                                Uri uri = Uri.parse(sharePath);
+                                //File newfile = new File(uri.getPath());
+                                //Uri fileUri = FileProvider.getUriForFile(getContext(), "com.example.android.audiohighlighter", newfile);
+                                Intent share = new Intent(Intent.ACTION_SEND).addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                share.setType("audio/*");
+                                share.putExtra(Intent.EXTRA_STREAM, uri);
+                                ((MainActivity) getContext()).getApplication().startActivity(Intent.createChooser(share, "Share Sound File").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION));
+
+                                return true;
+
                             case R.id.item_option_rename:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                 builder.setTitle("Enter New Name");
@@ -136,5 +163,29 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
         });
 
         return listItemView;
+    }
+
+    private String copyFiletoExternalStorage(String resourceId, String resourceName){
+        String pathSDCard = Environment.getExternalStorageDirectory() + "/Android/data/" + resourceName;
+        try{
+            InputStream in = new FileInputStream(resourceId);
+            FileOutputStream out = null;
+            out = new FileOutputStream(pathSDCard);
+            byte[] buff = new byte[1024];
+            int read = 0;
+            try {
+                while ((read = in.read(buff)) > 0) {
+                    out.write(buff, 0, read);
+                }
+            } finally {
+                in.close();
+                out.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  pathSDCard;
     }
 }

@@ -233,6 +233,12 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
     }
 
     private void RecordButtonPressed(){
+        MainActivity mi = (MainActivity)getActivity();
+        if (!mi.RecordAudioPermissionGranted()){
+            // TODO: Tell user to grant permission
+            return;
+        }
+
         if (!isRecording && !isPaused) {
             // Prepare media recorder and initialize/re-initialize variables properly
             InitializeAudioRecorder();

@@ -1,6 +1,7 @@
 package com.example.android.audiohighlighter;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -10,10 +11,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,8 +36,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     private String adMobAppID = "ca-app-pub-9485517543167139~7756344909";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private boolean permissionToRecordAccepted = false;
-    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 112;
+    private static final int REQUEST_READ_EXTERNAL_STORAGE_PERMISSION = 150;
+    private boolean permissionToRecordAccepted, permissionToReadWriteFilesAccepted = false;
+    private String [] permissions = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     private SharedPreferences sharedPreferences;
     private int runCount;
@@ -58,6 +63,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FinishInit();
+
+        if (Build.VERSION.SDK_INT >=23){
+            if ((checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+                ActivityCompat.requestPermissions(MainActivity.this, permissions, REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION);
+                ActivityCompat.requestPermissions(MainActivity.this, permissions, REQUEST_READ_EXTERNAL_STORAGE_PERMISSION);
+            }
+            else{
+                permissionToRecordAccepted = true;
+                permissionToReadWriteFilesAccepted = true;
+            }
+        }
+
+    }
+
+    private void FinishInit(){
+
         MobileAds.initialize(this, adMobAppID);
 
         sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
@@ -66,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         CreateFragments();
         SetupActionBar();
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
         bp = new BillingProcessor(this, null, this);
 
@@ -100,16 +122,48 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         // TODO: Set first run false after showing this. Maybe counter for first 5 times?
     }
 
+    public boolean ReadWritePermissionGranted(){
+        return (permissionToReadWriteFilesAccepted);
+    }
+
+    public boolean RecordAudioPermissionGranted(){
+        return permissionToRecordAccepted;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Log.i("PERMISSIONS", "Permission has been denied by user");
+                    //finish();
+                }
+                else{
+                    permissionToRecordAccepted = true;
+                }
+                //if (!permissionToRecordAccepted)
+                //    finish();
+                break;
+            case REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION:
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Log.i("PERMISSIONS", "Permission has been denied by user");
+                    //finish();
+                }
+                else{
+                    permissionToReadWriteFilesAccepted = true;
+                }
+                break;
+            case REQUEST_READ_EXTERNAL_STORAGE_PERMISSION:
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Log.i("PERMISSIONS", "Permission has been denied by user");
+                    //finish();
+                }
+                else{
+                    permissionToReadWriteFilesAccepted = true;
+                }
                 break;
         }
-        if (!permissionToRecordAccepted ) finish();
-
     }
 
     // Implementation of interface function
