@@ -149,7 +149,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
         newTitle = null;
 
         // Use time/date for temporary recording name
-        DateFormat df = new SimpleDateFormat("HH-mm-ss'T'MM-dd-yyyy");
+        DateFormat df = new SimpleDateFormat("MM-dd-yyyy' T 'HH-mm-ss");
         tempFilePrefix = df.format(Calendar.getInstance().getTime());
 
         TextView tv = view.findViewById(R.id.record_screen_title_text);
