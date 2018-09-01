@@ -94,7 +94,7 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                             case R.id.item_option_share:
                                 MainActivity mi = (MainActivity)((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag("library").getActivity();
                                 if (!mi.ReadWritePermissionGranted()){
-                                    // TODO: Tell user to grant permissions.
+                                    Toast.makeText(getContext(), "Please grant file access permissions.", Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                                 String sharePath = copyFiletoExternalStorage(getContext().getFilesDir() + "/"
