@@ -35,6 +35,8 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
     private MainActivityInterface mainActivityInterface;
     private String m_Text;
 
+    private MainActivity mi;
+
     public LibraryItemAdapter(Activity context, ArrayList<LibraryItem> libraryItems, MainActivityInterface mai){
         super(context, 0, libraryItems);
         items = libraryItems;
@@ -92,15 +94,16 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                 return true;
 
                             case R.id.item_option_share:
-                                MainActivity mi = (MainActivity)((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag("library").getActivity();
-                                if (!mi.ReadWritePermissionGranted()){
-                                    Toast.makeText(getContext(), "Please grant file access permissions.", Toast.LENGTH_SHORT).show();
-                                    return true;
-                                }
+                                mi = (MainActivity)((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag("library").getActivity();
                                 if (!mi.IsPremium()){
                                     Toast.makeText(getContext(), "Please purchase premium to share audio.", Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
+                                if (!mi.ReadWritePermissionGranted()){
+                                    Toast.makeText(getContext(), "Please grant file access permissions.", Toast.LENGTH_SHORT).show();
+                                    return true;
+                                }
+
                                 String sharePath = copyFiletoExternalStorage(getContext().getFilesDir() + "/"
                                     + currentItem.getItemName()+".ogg", currentItem.getItemName()+".wav");
                                 Uri uri = Uri.parse(sharePath);
@@ -129,6 +132,12 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         m_Text = input.getText().toString();
+
+                                        if (mi.ContainsIllegalCharacter(m_Text)){
+                                            Toast.makeText(getContext(), "Illegal character in file name.", Toast.LENGTH_SHORT).show();
+                                            dialog.cancel();
+                                            return;
+                                        }
 
                                         if(m_Text.length() > 0 && m_Text != null) {
                                             // TODO: Add check for already existing duplicate name

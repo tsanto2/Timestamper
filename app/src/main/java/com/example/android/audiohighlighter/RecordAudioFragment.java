@@ -468,6 +468,11 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String m_Text = input.getText().toString();
+                            if (mi.ContainsIllegalCharacter(m_Text)){
+                                Toast.makeText(getContext(), "Illegal character in file name.", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                                return;
+                            }
                             newTitle = m_Text;
 
                             TextView tv = getView().findViewById(R.id.record_screen_title_text);
