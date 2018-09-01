@@ -278,6 +278,7 @@
             </RelativeLayout>
 
             <View
+                android:id="@+id/premium_popup_setting_underline"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:paddingStart="24dp"

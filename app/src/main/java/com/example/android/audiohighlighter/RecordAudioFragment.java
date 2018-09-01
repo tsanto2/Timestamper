@@ -43,7 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class RecordAudioFragment extends android.support.v4.app.Fragment implements BillingProcessor.IBillingHandler{
+public class RecordAudioFragment extends android.support.v4.app.Fragment{
 
     private View view;
     private boolean isRecording, isPaused;
@@ -62,9 +62,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
     private long startTime, currTime, pauseStartTime, pauseTimeMillis;
     private String newTitle;
     private long recordingLimit;
-    public boolean isPremium;
-
-    public BillingProcessor bp;
+    public MainActivity mi;
 
     private int sampleRate;
 
@@ -93,12 +91,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.fragment_record_audio, container, false);
-
-        bp = new BillingProcessor(getContext(), null, this);
-        //if (bp.isPurchased("android.test.purchased")){
-        if (bp.isPurchased("premium_test.1")) {
-            isPremium = true;
-        }
+        mi = (MainActivity)getActivity();
 
         internalDirectory = getContext().getFilesDir();
         timestamps = new ArrayList<>();
@@ -114,7 +107,6 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
         SetRecordTimestampButtonListener();
         SetSaveRecordingButtonListener();
         SetTitleTextTouchedListener();
-        SetPurchaseButtonListener();
 
         Button btn = view.findViewById(R.id.purchase_btn);
         btn.setVisibility(View.GONE);
@@ -198,7 +190,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
                 int time = (int)(SystemClock.uptimeMillis() - pauseTimeMillis - startTime);
                 recLength.setText(playbackFrag.getTime(time));
 
-                if (time >= recordingLimit && !isPremium){
+                if (time >= recordingLimit && !mi.IsPremium()){
                     PauseRecording();
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -206,7 +198,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
                             .setMessage("Premium unlock allows you to record for an unlimited amount of time! Please purchase premium if you would like to record for a longer duration.")
                             .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    PurchasePremium();
+                                    mi.PurchasePremium();
                                     UnpauseRecording();
                                     StopRecording(true);
                                 }
@@ -237,6 +229,10 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
         if (!mi.RecordAudioPermissionGranted()){
             Toast.makeText(view.getContext(), "Please grant recording permission.", Toast.LENGTH_SHORT).show();
             return;
+        }
+        if (!mi.IsPremium()) {
+            recordingLimit = 1200000;
+            //recordingLimit = 10000;
         }
 
         if (!isRecording && !isPaused) {
@@ -408,7 +404,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
                     recordingCount++;
                 }
 
-                if ((!isPremium && recordingCount < 12) || isPremium)
+                if ((!mi.IsPremium() && recordingCount < 12) || mi.IsPremium())
                     RecordButtonPressed();
                 else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -416,7 +412,7 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
                         .setMessage("Premium unlock allows you to create an unlimited amount of recordings! Please purchase premium or delete an existing recording to create more.")
                         .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                PurchasePremium();
+                                mi.PurchasePremium();
                             }
                         })
                         .setNegativeButton("No Thanks", new DialogInterface.OnClickListener() {
@@ -491,70 +487,4 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment impleme
         });
     }
 
-    void SetPurchaseButtonListener(){
-        Button btn = (Button)view.findViewById(R.id.purchase_btn);
-        //if (bp.isPurchased("android.test.purchased")){
-        if (bp.isPurchased("premium_test.1")){
-            // TODO: Write code here to validate premium purchase
-            isPremium = true;
-            btn.setText("Butts");
-        }
-        else{
-            // TODO: Change recording length limit
-            isPremium = false;
-            // Non-premium time limit = 30 minutes
-            recordingLimit = 1200000;
-            //recordingLimit = 10000;
-        }
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //bp.purchase(getActivity(), "android.test.purchased");
-                //bp.purchase(getActivity(), "premium_test.1");
-                PurchasePremium();
-            }
-        });
-    }
-
-    public void PurchasePremium(){
-        //bp.purchase(getActivity(), "android.test.purchased");
-        bp.purchase(getActivity(), "premium_test.1");
-    }
-
-    @Override
-    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-        Button btn = view.findViewById(R.id.purchase_btn);
-        btn.setText("SUCCESS!");
-        isPremium = true;
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-
-    }
-
-    @Override
-    public void onBillingError(int errorCode, @Nullable Throwable error) {
-
-    }
-
-    @Override
-    public void onBillingInitialized() {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (!bp.handleActivityResult(requestCode, resultCode, data)){
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onDestroy(){
-        if (bp != null){
-            bp.release();
-        }
-        super.onDestroy();
-    }
 }

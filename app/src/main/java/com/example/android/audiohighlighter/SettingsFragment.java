@@ -30,14 +30,14 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class SettingsFragment extends android.support.v4.app.Fragment implements BillingProcessor.IBillingHandler{
+public class SettingsFragment extends android.support.v4.app.Fragment{
 
     private View view;
 
     private int stampCushion;
     private SharedPreferences sharedPreferences;
 
-    public BillingProcessor bp;
+    private MainActivity mi;
 
     public static SettingsFragment newInstance(){
         SettingsFragment fragment = new SettingsFragment();
@@ -54,7 +54,7 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
         view = inflater.inflate(R.layout.fragment_settings, container, false);
         sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
-        bp = new BillingProcessor(getContext(), null, this);
+        mi = (MainActivity)getActivity();
 
         SetTimestampCushionSettingListener();
 
@@ -78,12 +78,11 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
     private void SetPremiumPurchaseButtonListener(){
         TextView tv = view.findViewById(R.id.premium_purchase_settings_btn);
 
-        if (!bp.isPurchased("premium_test.1")) {
-        //if (!bp.isPurchased("android.test.purchased")) {
+        if (!mi.IsPremium()) {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PurchasePremium();
+                    mi.PurchasePremium();
                 }
             });
         }
@@ -195,48 +194,53 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
 
     private void SetPremiumPopupSettingListener(){
         RelativeLayout premiumPopupSetting = view.findViewById(R.id.premium_popup_setting);
-        if (sharedPreferences.getBoolean("PremiumDialogueDisabled", false)){
-            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
-            tv.setText("Yes");
-        }
-        else{
-            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
-            tv.setText("No");
-        }
-        premiumPopupSetting.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Disable Premium Popup?")
-                    //.setMessage("")
-                    .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO: Implement purchase flow
-                            PurchasePremium();
-                            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
-                            tv.setText("No");
 
-                            sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean("PremiumDialogueDisabled", false);
-                            editor.commit();
-                        }
-                    })
-                    .setNegativeButton("Disable", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
-                            tv.setText("Yes");
-
-                            sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean("PremiumDialogueDisabled", true);
-                            editor.commit();
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert);
-                builder.show();
+        if (mi.IsPremium()){
+            premiumPopupSetting.setVisibility(View.GONE);
+            view.findViewById(R.id.premium_popup_setting_underline).setVisibility(View.GONE);
+        }
+        else {
+            if (sharedPreferences.getBoolean("PremiumDialogueDisabled", false)) {
+                TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+                tv.setText("Yes");
+            } else {
+                TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+                tv.setText("No");
             }
-        });
+            premiumPopupSetting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Disable Premium Popup?")
+                            //.setMessage("")
+                            .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mi.PurchasePremium();
+                                    TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+                                    tv.setText("No");
+
+                                    sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putBoolean("PremiumDialogueDisabled", false);
+                                    editor.commit();
+                                }
+                            })
+                            .setNegativeButton("Disable", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    TextView tv = view.findViewById(R.id.premium_popup_setting_text_view);
+                                    tv.setText("Yes");
+
+                                    sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putBoolean("PremiumDialogueDisabled", true);
+                                    editor.commit();
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert);
+                    builder.show();
+                }
+            });
+        }
     }
 
     private void SetStorageSpaceSettingListener(){
@@ -398,46 +402,6 @@ public class SettingsFragment extends android.support.v4.app.Fragment implements
         editor.commit();
         TextView tv = view.findViewById(R.id.bit_rate_setting_text_view);
         tv.setText(Integer.toString(newBitRate) + "-bit");
-    }
-
-    public void PurchasePremium(){
-        //bp.purchase(getActivity(), "android.test.purchased");
-        bp.purchase(getActivity(), "premium_test.1");
-    }
-
-    @Override
-    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-
-    }
-
-    @Override
-    public void onBillingError(int errorCode, @Nullable Throwable error) {
-
-    }
-
-    @Override
-    public void onBillingInitialized() {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (!bp.handleActivityResult(requestCode, resultCode, data)){
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onDestroy(){
-        if (bp != null){
-            bp.release();
-        }
-        super.onDestroy();
     }
 
 }

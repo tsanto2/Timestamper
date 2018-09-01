@@ -29,7 +29,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class LibraryAccessFragment extends android.support.v4.app.Fragment implements  BillingProcessor.IBillingHandler{
+public class LibraryAccessFragment extends android.support.v4.app.Fragment{
 
     private LibraryItemAdapter libraryItemAdapter;
     private MainActivityInterface mainActivityInterface;
@@ -37,9 +37,8 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment imple
     private ListView listView;
     private ViewGroup view;
     private File dataDir;
-    private boolean isPremium = false;
 
-    private BillingProcessor bp;
+    private MainActivity mi;
 
     public static LibraryAccessFragment newInstance(){
         LibraryAccessFragment fragment = new LibraryAccessFragment();
@@ -54,8 +53,7 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment imple
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = (ViewGroup)inflater.inflate(R.layout.fragment_access_library, container, false);
-
-        bp = new BillingProcessor(getContext(), null, this);
+        mi = (MainActivity)getActivity();
 
         // List of saved audio+timestamp items in library
         libraryItems = new ArrayList<>();
@@ -72,14 +70,9 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment imple
             tv.setVisibility(View.INVISIBLE);
         }
 
-        //if (!bp.isPurchased("android.test.purchased"))
-        if (!bp.isPurchased("premium_test.1"))
-            isPremium = false;
-        else
-            isPremium = true;
-
         AdView bannerAdView = view.findViewById(R.id.adView);
-        if (!isPremium) {
+
+        if (!mi.IsPremium()) {
             AdRequest adRequest = new AdRequest.Builder().build();
             bannerAdView.loadAd(adRequest);
         }
@@ -200,40 +193,4 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment imple
 
         return name;
     }
-
-    @Override
-    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-
-    }
-
-    @Override
-    public void onBillingError(int errorCode, @Nullable Throwable error) {
-
-    }
-
-    @Override
-    public void onBillingInitialized() {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (!bp.handleActivityResult(requestCode, resultCode, data)){
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onDestroy(){
-        if (bp != null){
-            bp.release();
-        }
-        super.onDestroy();
-    }
-
 }

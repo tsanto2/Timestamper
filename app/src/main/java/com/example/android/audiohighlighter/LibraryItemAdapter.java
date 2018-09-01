@@ -97,6 +97,10 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                     Toast.makeText(getContext(), "Please grant file access permissions.", Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
+                                if (!mi.IsPremium()){
+                                    Toast.makeText(getContext(), "Please purchase premium to share audio.", Toast.LENGTH_SHORT).show();
+                                    return true;
+                                }
                                 String sharePath = copyFiletoExternalStorage(getContext().getFilesDir() + "/"
                                     + currentItem.getItemName()+".ogg", currentItem.getItemName()+".wav");
                                 Uri uri = Uri.parse(sharePath);

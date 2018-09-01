@@ -34,6 +34,8 @@ import com.google.android.gms.ads.MobileAds;
 public class MainActivity extends AppCompatActivity implements MainActivityInterface, BillingProcessor.IBillingHandler{
 
     private String adMobAppID = "ca-app-pub-9485517543167139~7756344909";
+    //private String purchaseID = "android.test.purchased";
+    private String purchaseID = "premium_test.1";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 112;
@@ -94,15 +96,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         runCount = sharedPreferences.getInt("RunCount", 0);
 
-        //if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false) && !bp.isPurchased("android.test.purchased")){
-        if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false) && !bp.isPurchased("premium_test.1")){
+        if (runCount > 1 && !sharedPreferences.getBoolean("PremiumDialogueDisabled", false) && !IsPremium()){
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("Premium Upgrade")
                     .setMessage("Premium upgrade allows you to record for as long as you want, create as many recordings as you want, and allows access to several customization settings. There are also many additional premium features planned for future updates.")
                     .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             RecordAudioFragment tempFrag = (RecordAudioFragment)getSupportFragmentManager().findFragmentByTag(RECORD_TAG);
-                            tempFrag.PurchasePremium();
+                            PurchasePremium();
                         }
                     })
                     .setNegativeButton("No Thanks", new DialogInterface.OnClickListener() {
@@ -128,6 +129,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
     public boolean RecordAudioPermissionGranted(){
         return permissionToRecordAccepted;
+    }
+
+    public boolean IsPremium(){
+        return bp.isPurchased(purchaseID);
+    }
+
+    public void PurchasePremium(){
+        bp.purchase(this, purchaseID);
     }
 
     @Override
