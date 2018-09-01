@@ -24,6 +24,7 @@
             android:background="@drawable/primary_title_bubble"
             android:backgroundTint="@color/colorAccent"
             android:textAlignment="center"
+            android:elevation="8dp"
             android:layout_marginTop="12dp"
             android:paddingTop="24dp"
             android:paddingBottom="24dp"

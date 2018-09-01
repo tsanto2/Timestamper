@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class SettingsFragment extends android.support.v4.app.Fragment{
     private SharedPreferences sharedPreferences;
 
     private MainActivity mi;
+
+    private float purchaseBtnElevation;
 
     public static SettingsFragment newInstance(){
         SettingsFragment fragment = new SettingsFragment();
@@ -76,13 +79,22 @@ public class SettingsFragment extends android.support.v4.app.Fragment{
     }
 
     private void SetPremiumPurchaseButtonListener(){
-        TextView tv = view.findViewById(R.id.premium_purchase_settings_btn);
+        final TextView tv = view.findViewById(R.id.premium_purchase_settings_btn);
+        purchaseBtnElevation = tv.getElevation();
 
         if (!mi.IsPremium()) {
-            tv.setOnClickListener(new View.OnClickListener() {
+            tv.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    mi.PurchasePremium();
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN){
+                        tv.setElevation(0);
+                    }
+                    if (event.getAction() == MotionEvent.ACTION_UP){
+                        tv.setElevation(purchaseBtnElevation);
+                        mi.PurchasePremium();
+                    }
+
+                    return true;
                 }
             });
         }

@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -63,6 +64,8 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment{
     private String newTitle;
     private long recordingLimit;
     public MainActivity mi;
+
+    private float timestampElevation, recordElevation, saveElevation;
 
     private int sampleRate;
 
@@ -395,55 +398,82 @@ public class RecordAudioFragment extends android.support.v4.app.Fragment{
 
     private void SetRecordAudioButtonListener(){
         recordAudioButton = view.findViewById(R.id.record_audio_btn);
+        recordElevation = recordAudioButton.getElevation();
 
-        recordAudioButton.setOnClickListener(new View.OnClickListener() {
+        recordAudioButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                recordingCount = 0;
-                for (File file : getContext().getFilesDir().listFiles()){
-                    recordingCount++;
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    recordAudioButton.setElevation(0);
                 }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    recordAudioButton.setElevation(recordElevation);
+                    recordingCount = 0;
+                    for (File file : getContext().getFilesDir().listFiles()) {
+                        recordingCount++;
+                    }
 
-                if ((!mi.IsPremium() && recordingCount < 12) || mi.IsPremium())
-                    RecordButtonPressed();
-                else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Free Recording Limit Reached")
-                        .setMessage("Premium unlock allows you to create an unlimited amount of recordings! Please purchase premium or delete an existing recording to create more.")
-                        .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                mi.PurchasePremium();
-                            }
-                        })
-                        .setNegativeButton("No Thanks", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                    if ((!mi.IsPremium() && recordingCount < 12) || mi.IsPremium())
+                        RecordButtonPressed();
+                    else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Free Recording Limit Reached")
+                                .setMessage("Premium unlock allows you to create an unlimited amount of recordings! Please purchase premium or delete an existing recording to create more.")
+                                .setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mi.PurchasePremium();
+                                    }
+                                })
+                                .setNegativeButton("No Thanks", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
                 }
+                return true;
             }
         });
     }
 
     private void SetRecordTimestampButtonListener(){
         final ImageButton recordTimestampButton = view.findViewById(R.id.record_timestamp_btn);
+        timestampElevation = recordTimestampButton.getElevation();
 
-        recordTimestampButton.setOnClickListener(new View.OnClickListener() {
+        recordTimestampButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                RecordTimestampButtonPressed();
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    recordTimestampButton.setElevation(0);
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    recordTimestampButton.setElevation(timestampElevation);
+                    RecordTimestampButtonPressed();
+                }
+
+                return true;
             }
         });
     }
 
     private void SetSaveRecordingButtonListener(){
-        ImageButton saveRecordingBtn = view.findViewById(R.id.save_recording_btn);
-        saveRecordingBtn.setOnClickListener(new View.OnClickListener(){
+        final ImageButton saveRecordingBtn = view.findViewById(R.id.save_recording_btn);
+        saveElevation = saveRecordingBtn.getElevation();
+
+        saveRecordingBtn.setOnTouchListener(new View.OnTouchListener(){
             @Override
-            public void onClick(View view){
-                StopRecording(true);
+            public boolean onTouch(View view, MotionEvent event){
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    saveRecordingBtn.setElevation(0);
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    saveRecordingBtn.setElevation(saveElevation);
+                    StopRecording(true);
+                }
+
+                return true;
             }
         });
     }
