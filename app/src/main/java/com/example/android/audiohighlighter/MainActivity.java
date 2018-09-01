@@ -34,8 +34,8 @@ import com.google.android.gms.ads.MobileAds;
 public class MainActivity extends AppCompatActivity implements MainActivityInterface, BillingProcessor.IBillingHandler{
 
     private String adMobAppID = "ca-app-pub-9485517543167139~7756344909";
-    //private String purchaseID = "android.test.purchased";
-    private String purchaseID = "premium_test.1";
+    private String purchaseID = "android.test.purchased";
+    //private String purchaseID = "premium_test.1";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 112;
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         FinishInit();
 
         if (Build.VERSION.SDK_INT >=23){
@@ -124,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
     }
 
     public boolean ReadWritePermissionGranted(){
-        return (permissionToReadWriteFilesAccepted);
+        boolean hasStoragePermissions = (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) && (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        return hasStoragePermissions;
     }
 
     public boolean RecordAudioPermissionGranted(){
