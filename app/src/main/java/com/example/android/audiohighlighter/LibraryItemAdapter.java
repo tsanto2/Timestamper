@@ -131,6 +131,7 @@ public class LibraryItemAdapter extends ArrayAdapter<LibraryItem>{
                                 builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        mi = (MainActivity)((MainActivity) getContext()).getSupportFragmentManager().findFragmentByTag("library").getActivity();
                                         m_Text = input.getText().toString();
 
                                         if (mi.ContainsIllegalCharacter(m_Text)){
