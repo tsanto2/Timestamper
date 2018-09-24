@@ -34,8 +34,10 @@ import com.google.android.gms.ads.MobileAds;
 public class MainActivity extends AppCompatActivity implements MainActivityInterface, BillingProcessor.IBillingHandler{
 
     private String adMobAppID = "ca-app-pub-9485517543167139~7756344909";
-    private String purchaseID = "android.test.purchased";
-    //private String purchaseID = "premium_test.1";
+    //private String purchaseID = "android.test.purchased";
+    private String purchaseID = "premium_test.1";
+
+    private String licenseKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlYXacmtjQPWR2CKZUgkpQeeH2yC6Ihb33EFS7lm5xA7KnkLoH+RffQ11d+ZYb3YvBXW73Gt0DUIZCnGS59QeXCZutJMUWFPCWHPLrF4i+QCpva/nj0eWcsrpmmVeIO02LnmSLBMsSCTS8rMsLJR15oMawRETKDYBHBLr0CRKWH2E20jsNBzHl+7z7Kx51QGMsSHkTkMVMw8hQwi2z53ZvQes878KUo8ojQBzidpOVaikn5dtyAXLsFEByYv/GNXzayLR70F6gpy/MUL8c3R7a5wxoUfmNvX+HVp1ZSjhgaYR1yCDBiLH341/tE5lxQdmxwUg3j6/V1O1DSKYplO49QIDAQAB";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 112;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         CreateFragments();
         SetupActionBar();
 
-        bp = new BillingProcessor(this, null, this);
+        bp = new BillingProcessor(this, licenseKey, this);
 
         runCount = sharedPreferences.getInt("RunCount", 0);
 

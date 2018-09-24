@@ -163,6 +163,15 @@ public class LibraryAccessFragment extends android.support.v4.app.Fragment{
 
         TextView tv = view.findViewById(R.id.empty_library_text);
 
+        AdView bannerAdView = view.findViewById(R.id.adView);
+        if (!mi.IsPremium()) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            bannerAdView.loadAd(adRequest);
+        }
+        else{
+            bannerAdView.setVisibility(View.GONE);
+        }
+
         if (libraryItems.size() > 0){
             tv.setVisibility(View.INVISIBLE);
         }
